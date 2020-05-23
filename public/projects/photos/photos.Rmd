@@ -1,13 +1,11 @@
 ---
-title: "Projects"
+title: "Photos"
 output: 
   html_document:
     allign: right
     theme: flatly
     highlight: monochrome
     css: coder.css
-
-    
 ---
 <DIV align="justify">
 
