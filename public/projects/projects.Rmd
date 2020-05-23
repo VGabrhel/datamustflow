@@ -1,0 +1,28 @@
+---
+title: "Projects"
+output: 
+  html_document:
+    allign: right
+    theme: flatly
+    highlight: monochrome
+    css: coder.css
+    toc: true
+    toc_depth: 2
+    toc_float: true
+
+    
+---
+<DIV align="justify">
+
+## Blog
+
+## An Introduction to R
+
+During my Ph.D. In future, I am going to turn the content in bookdown
+
+## Generative aRt
+
+## Photography
+
+Without further ado, enter my humble [gallery]().
+</DIV>
