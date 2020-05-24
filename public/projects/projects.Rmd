@@ -5,9 +5,7 @@ output:
     allign: right
     theme: flatly
     highlight: monochrome
-    css: coder.css
-
-    
+    css: ~/Desktop/Git/Webpage/datamustflow/public/css/coder.min.a4f332213a21ce8eb521670c614470c58923aaaf385e2a73982c31dd7642decb.css
 ---
 <DIV align="justify">
 
@@ -21,5 +19,5 @@ During my Ph.D. In future, I am going to turn the content in bookdown
 
 ## Photography
 
-Without further ado, enter my humble <a class="navigation-link" href="projects/photos/photos.html">gallery</a>.
+Without further ado, enter my humble <a class="navigation-link" href="photos/photos.html">gallery</a>.
 </DIV>

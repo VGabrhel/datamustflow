@@ -5,19 +5,49 @@ output:
     allign: right
     theme: flatly
     highlight: monochrome
-    css: coder.css
+    css: ~/Desktop/Git/Webpage/datamustflow/public/css/coder.min.a4f332213a21ce8eb521670c614470c58923aaaf385e2a73982c31dd7642decb.css
 ---
 <DIV align="justify">
 
-## Blog
+<br> 
 
-## An Introduction to R
 
-During my Ph.D. In future, I am going to turn the content in bookdown
+```{r, echo=FALSE,out.width="100%", out.height="100%",fig.cap="[Harpa](https://en.wikipedia.org/wiki/Harpa_(concert_hall)) - Reykjavík, Iceland",fig.show='hold',fig.align='center'}
+knitr::include_graphics("iceland.jpg")
+``` 
 
-## Generative aRt
+<br>
 
-## Photography
+```{r, echo=FALSE,out.width="100%", out.height="100%",fig.cap="[Kubuswoningen](https://en.wikipedia.org/wiki/Cube_house) - Rotterdam, Netherlands",fig.show='hold',fig.align='center'}
+knitr::include_graphics("rotterdam.jpg")
+``` 
 
-Without further ado, enter my humble <a class="navigation-link" href="projects/photos/photos.html">gallery</a>.
+<br>
+
+```{r, echo=FALSE,out.width="100%", out.height="100%",fig.cap="[Havenhuis](https://en.wikipedia.org/wiki/Port_Authority_Building_(Antwerp)) - Antwerp, Belgium",fig.show='hold',fig.align='center'}
+knitr::include_graphics("antwerp.jpg")
+``` 
+
+<br>
+
+```{r, echo=FALSE,out.width="100%", out.height="100%",fig.cap="Toronto, Canada",fig.show='hold',fig.align='center'}
+knitr::include_graphics("toronto.jpg")
+``` 
+
+<br>
+
+```{r, echo=FALSE,out.width="100%", out.height="100%",fig.cap="[Slovak Radio Building](https://en.wikipedia.org/wiki/Slovak_Radio_Building) - Bratislava, Slovakia",fig.show='hold',fig.align='center'}
+knitr::include_graphics("bratislava.jpg")
+``` 
+
+<br>
+
+```{r, echo=FALSE,out.width="100%", out.height="100%",fig.cap="Zlín, Czech Republic",fig.show='hold',fig.align='center'}
+knitr::include_graphics("zlin.JPG")
+``` 
+
 </DIV>
+
+&nbsp;
+<hr />
+<p style="text-align: center;"><b>Go back to <a href="/projects/projects.html">Projects</b></a></p>
