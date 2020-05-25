@@ -10,24 +10,7 @@
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
     
-    <item>
-      <title>cv</title>
-      <link>/2020/05/15/cv/</link>
-      <pubDate>Fri, 15 May 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/2020/05/15/cv/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>trial</title>
-      <link>/2020/04/26/trial/</link>
-      <pubDate>Sun, 26 Apr 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/2020/04/26/trial/</guid>
-      <description>dfdfdf</description>
-    </item>
-    
+     
     <item>
       <title>Render LaTeX using KaTeX</title>
       <link>/posts/render-latex-using-katex/</link>
