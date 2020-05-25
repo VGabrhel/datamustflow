@@ -11,15 +11,37 @@ output:
 
 ## Blog
 
+One of the main reasons behind creating this webpage was a desire to make myself space where I could share my data-related work. 
+
+That is, outside my occupation. One of the perks of being exposed to the world of information technology is to learn skills that can be used outside the occupational setting. So, my aim is to put in use what I have learned so far. Be that as a *data-citizenship* action or an idea of how to *visualise my listening habits*.
+
+However, I wouldn’t like to end up by repeating the same thing. As someone who is inspired by the [kaizen](https://en.wikipedia.org/wiki/Kaizen) principle, I aim to improve my work on every iteration, albeit such an improvement may be small.
+
+<a class="navigation-link" href="/post/"><b>[Continue to the blog]</b></a>
+
 ## An Introduction to R
 
-Between 2016 and 2019, I taught an [introductiory course in R](https://is.muni.cz/course/fss/autumn2019/PSYn5320) psychologists, sociologists, and other social scientists at Masaryk University. During my Ph.D. In future, I am going to turn the content in bookdown
+Between 2016 and 2019, I taught an [introductory course in R](https://is.muni.cz/course/fss/autumn2019/PSYn5320) for psychologists, sociologists, and other social scientists at Masaryk University. After four iterations, I decided to turn materials developed in the course into a **self-paced introduction to R**. 
 
-## Generative aRt
+Although anyone can make use of these materials, I believe that those who could benefit the most are students/graduates from fields such as *psychology*, *sociology*, or *political science*. This conclusion stems from knowing my own background and the original target group of the course. I was trained to use *IBM SPSS* for doing *statistical analysis* in *research*, be it descriptive statistics using *box-plots* or multivariate techniques like *linear mixed models*. After being able to translate these skills into R, was asked to show a way to others with a similar background. 
 
-Without further ado, <a class="navigation-link" href="generativeart/generativeart.html">have a look</a>.
+Currently, the materials are accessible as individual **R notebooks** - commentary along with demonstrations of the respective code. In future, I am going to turn the content in a handbook. That being said, enjoy the journey!
+
+[**[Continue to the course materials]**](r101/r101.html)
 
 ## Photography
 
-Without further ado, <a class="navigation-link" href="photos/photos.html">have a look</a>.
+
+
+Without further ado, have a look!
+
+[**[Continue to the photo gallery]**](photos/photos.html)
+
+## Generative art
+
+Quite recently, I began to appreciate a unique domain intersecting the worlds of coding and art - generative art. To simplify things a lot, generative art represents the involvement of a human-independent system (such as an algorithm) in a creative process. Such a system is a key element within the creative process, including its outputs. Be it paintings, songs, novels, or sculptures. If you would like to have a better overview, the following [article on Wikipedia](https://en.wikipedia.org/wiki/Generative_art) could be a place to start.
+
+Once you know what to expect, take a peek at "my" pieces if you like.
+
+[**[Continue to the image gallery]**](generativeart/generativeart.html)
 </DIV>
