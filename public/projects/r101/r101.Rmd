@@ -1,0 +1,45 @@
+---
+title: "R101: A practical guide to using R"
+output: 
+  html_document:
+    allign: right
+    theme: flatly
+    highlight: monochrome
+    css: ~/Desktop/Git/Webpage/datamustflow/public/css/coder.min.a4f332213a21ce8eb521670c614470c58923aaaf385e2a73982c31dd7642decb.css
+---
+
+# Course characteristic
+
+This course has three main goals. The first is to reduce the degree of dependence (ideally to eliminate it) from paid statistical software, which may be unavailable for financial reasons and which provides the user with relatively limited work options. 
+
+Secondly, this course aims to promote interest in R as the programming language with (almost) endless analytical possibilities and a vibrant global community.
+
+Last but not least, I would like you to have fun. Learning something like doing data analysis in R may not be easy. However, it could be quite enjoyable too. I admire [Andy Field](https://www.discoveringstatistics.com/) for his humorous, yet comprehensive way of teaching complex abstract topics such as factor rotation. My humble aspiration is to make learning R joyful, even if for a bit.
+
+So, what exactly can you expect?
+
+
+# Covered topics:
+
+01. PROGRAMMING LANGUAGE R
+
+a) Conceptual introduction to R
+b) Installing R and RStudio, an introduction to the environment, libraries
+c) Fundamentals – using R as a calculator, assigning values to objects, objects classes
+d) Coding etiquette
+
+<u>Recomended reading</u>:
+
+* Muenchen, R. A. (2011). R for SAS and SPSS Users. Springer: New York.
+* Norman, M. (2011). The Art of R Programming. No Starch Press: San Francisco.
+* Coding etiquette – https://ourcodingclub.github.io/2017/04/25/etiquette.html
+* Getting started with R and RStudio – https://ourcodingclub.github.io/2016/11/13/intro-to-r.html
+* Google’s R Style Guide – https://google.github.io/styleguide/Rguide.xml
+* R basics, workspace and working directory, RStudio projects – http://stat545.com/block002_hello-rworkspace-wd-project.html
+* RStudio IDE Cheat Sheet – https://www.rstudio.com/wp-content/uploads/2016/01/rstudio-IDE-cheatsheet.pdf
+* Base R Cheat Sheet – https://www.rstudio.com/wp-content/uploads/2016/05/base-r.pdf
+
+<hr />
+&nbsp;
+&nbsp;
+<p style="text-align: center;"><b>Go back to <a href="/projects/projects.html">Projects</b></a></p>
