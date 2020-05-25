@@ -13,9 +13,11 @@ output:
 
 ## An Introduction to R
 
-During my Ph.D. In future, I am going to turn the content in bookdown
+Between 2016 and 2019, I taught an [introductiory course in R](https://is.muni.cz/course/fss/autumn2019/PSYn5320) psychologists, sociologists, and other social scientists at Masaryk University. During my Ph.D. In future, I am going to turn the content in bookdown
 
 ## Generative aRt
+
+Without further ado, <a class="navigation-link" href="generativeart/generativeart.html">have a look</a>.
 
 ## Photography
 
