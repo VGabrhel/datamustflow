@@ -1,0 +1,33 @@
+---
+title: "Projects"
+output: 
+  html_document:
+    allign: right
+    theme: flatly
+    highlight: monochrome
+    css: ~/Desktop/Git/Webpage/datamustflow/public/css/coder.min.a4f332213a21ce8eb521670c614470c58923aaaf385e2a73982c31dd7642decb.css
+    toc: true
+    toc_depth: 2
+    toc_float: true
+---
+<DIV align="justify">
+<h2 id="blog">Blog</h2>
+<p>One of the main reasons behind creating this webpage was a desire to make myself space where I could share my data-related work.</p>
+<p>That is, outside my occupation. One of the perks of being exposed to the world of information technology is to learn skills that can be used outside the occupational setting. So, my aim is to put in use what I have learned so far. Be that as a <em>data-citizenship</em> action or an idea of how to <em>visualise my listening habits</em>.</p>
+<p>However, I wouldn’t like to end up by repeating the same thing. As someone who is inspired by the <a href="https://en.wikipedia.org/wiki/Kaizen">kaizen</a> principle, I aim to improve my work on every iteration, albeit such an improvement may be small.</p>
+<p><a class="navigation-link" href="/post/"><b>[Continue to the blog]</b></a></p>
+<h2 id="an-introduction-to-r">An Introduction to R</h2>
+<p>Between 2016 and 2019, I taught an <a href="https://is.muni.cz/course/fss/autumn2019/PSYn5320">introductory course in R</a> for psychologists, sociologists, and other social scientists at Masaryk University. After four iterations, I decided to turn materials developed in the course into a <strong>self-paced introduction to R</strong>.</p>
+<p>Although anyone can make use of these materials, I believe that those who could benefit the most are students/graduates from fields such as <em>psychology</em>, <em>sociology</em>, or <em>political science</em>. This conclusion stems from knowing my own background and the original target group of the course. I was trained to use <em>IBM SPSS</em> for doing <em>statistical analysis</em> in <em>research</em>, be it descriptive statistics using <em>box-plots</em> or multivariate techniques like <em>linear mixed models</em>. After being able to translate these skills into R, was asked to show a way to others with a similar background.</p>
+<p>Currently, the materials are accessible as individual <strong>R notebooks</strong> - commentary along with demonstrations of the respective code. In future, I am going to turn the content in a handbook. That being said, enjoy the journey!</p>
+<p><a href="r101/r101.html"><strong>[Continue to the course materials]</strong></a></p>
+<h2 id="photography">Photography</h2>
+<p>For me, photography is a way to both explore the world and to express myself. I prefer taking pictures of “everyday” objects or imaginaries from an unusual perspective. By objects, I usually mean landscapes or architecture.</p>
+<p>Especially, I enjoy seeing the world through the wide lens (e.g. <em>Sigma 10-20mm f/3.5</em> or <em>Samyang 8 mm f/3,5 UMC Fish-eye CS II</em>).</p>
+<p>Without further ado, have a look!</p>
+<p><a href="photos/photos.html"><strong>[Continue to the photo gallery]</strong></a></p>
+<h2 id="generative-art">Generative art</h2>
+<p>Quite recently, I began to appreciate a unique domain intersecting the worlds of coding and art - generative art. To simplify things a lot, generative art represents the involvement of a human-independent system (such as an algorithm) in a creative process. Such a system is a key element within the creative process, including its outputs. Be it paintings, songs, novels, or sculptures. If you would like to have a better overview, the following <a href="https://en.wikipedia.org/wiki/Generative_art">article on Wikipedia</a> could be a place to start.</p>
+<p>Once you know what to expect, take a peek at “my” pieces if you like.</p>
+<p><a href="generativeart/generativeart.html"><strong>[Continue to the image gallery]</strong></a></p>
+</DIV>
