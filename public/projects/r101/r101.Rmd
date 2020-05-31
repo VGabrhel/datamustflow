@@ -13,9 +13,9 @@ output:
 
 # Course characteristic
 
-This course has three main goals. The first is to reduce the degree of dependence (ideally to eliminate it) from paid statistical software, which may be unavailable for financial reasons and which provides the user with relatively limited work options. 
+This course has three main goals. The first is to eliminate dependence on paid statistical software, which may be unavailable for financial reasons and which provides the user with relatively limited work options.
 
-Secondly, this course aims to promote interest in R as the programming language with (almost) endless analytical possibilities and a vibrant global community.
+Secondly, this course aims to promote interest in R as the programming language with (almost) endless analytical possibilities and vibrant global community.
 
 Last but not least, I would like you to have fun. Learning something like doing data analysis in R may not be easy. However, it could be quite enjoyable too. I admire [Andy Field](https://www.discoveringstatistics.com/) for his humorous, yet comprehensive way of teaching complex abstract topics such as factor rotation. My humble aspiration is to make learning R joyful, even if for a bit.
 
@@ -54,7 +54,7 @@ e) Lists
 * Navarro, D. J. (2014). Learning statistics with R: A tutorial for psychology students and other beginners. Available online: http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf
 * Norman, M. (2011). The Art of R Programming. No Starch Press: San Francisco.
 
-##### 03. DATA IMPORT
+##### 03. IMPORTING DATA
 a) .csv
 b) .txt
 c) .xlsx
@@ -62,10 +62,95 @@ d) .sav
 
 <u>Additional materials</u>:
 
-Muenchen, R. A. (2011). R for SAS and SPSS Users. Springer: New York.
-Navarro, D. J. (2014). Learning statistics with R: A tutorial for psychology students and other beginners.
-Available online: http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf
-Data Import : : CHEAT SHEET – https://ugoproto.github.io/ugo_r_doc/data-import.pdf
+* Muenchen, R. A. (2011). R for SAS and SPSS Users. Springer: New York.
+* Navarro, D. J. (2014). Learning statistics with R: A tutorial for psychology students and other beginners. Available online: http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf
+* Data Import : : CHEAT SHEET – https://ugoproto.github.io/ugo_r_doc/data-import.pdf
+
+##### 04. CLEANING DATA 
+a) Messy data, tidy data
+b) Date and time, strings
+c) Missing values, outliers, errors
+
+<u>Additional materials</u>:
+
+* Muenchen, R. A. (2011). R for SAS and SPSS Users. Springer: New York.
+* Navarro, D. J. (2014). Learning statistics with R: A tutorial for psychology students and other beginners. Available online: http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf
+* Norman, M. (2011). The Art of R Programming. No Starch Press: San Francisco.
+
+##### 05. WRANGLING DATA (TIDYVERSE)
+a) tbl
+b) select, mutate
+c) filter, arrange
+d) summarise, %>%
+e) group_by
+
+<u>Additional materials</u>:
+
+* Data Wrangling with dplyr and tidyr Cheat Sheet – https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf
+
+##### 06. EXPLORATING DATA 
+a) Categorical data
+b) Continuous data
+
+<u>Additional materials</u>:
+
+* Muenchen, R. A. (2011). R for SAS and SPSS Users. Springer: New York.
+* Navarro, D. J. (2014). Learning statistics with R: A tutorial for psychology students and other beginners. Available online: http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf
+* Norman, M. (2011). The Art of R Programming. No Starch Press: San Francisco.
+
+##### 07. VISUALISATIONS
+a) Bar chart
+b) Histogram
+c) Boxplot
+d) Error bar
+e) Scatterplot
+f) Pirate plot
+
+<u>Additional materials</u>:
+
+* Kabacoff, R. I. (2011). R in Action Data analysis and graphics with R. Manning: Shelter Island.
+* Wickham, H. (2009). ggplot2: Elegant Graphics for Data Analysis. Available online: http://moderngraphics11.pbworks.com/f/ggplot2-Book09hWickham.pdf.
+* Data Visualization with ggplot2 Cheat Sheet – https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf
+
+##### 08. GROUP COMPARISONS
+a) t-test (one-sample, two independent and two dependent samples), Student's and Welch's t-test
+b) ANalysis Of VAriance (ANOVA)
+
+<u>Additional materials</u>:
+
+* Field, A., Miles, J., & Field, Z. (2012). Discovering Statistics Using R. Sage: UK.
+* Lakens, D. (n.d.). The perfect t-test. Staženo dne 8. 10. 2016. Dostupné online na: http://daniellakens.blogspot.cz/2015/05/the-perfect-t-test.html
+* Navarro, D. J. (2014). Learning statistics with R: A tutorial for psychology students and other beginners. Available online: http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf
+* Verzani, J. (2014). Using R for Introductory Statistics (2. edice). Chapman & Hall: Boca Raton.
+
+##### 09. CORRELATION, LINEAR REGRESSION
+a) Correlation (Pearson's r, Spearman's rho, Kendall's tau)
+b) Linear regression
+
+<u>Additional materials</u>:
+
+* Field, A., Miles, J., & Field, Z. (2012). Discovering Statistics Using R. Sage: UK.
+* Navarro, D. J. (2014). Learning statistics with R: A tutorial for psychology students and other beginners. Available online: http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf
+
+##### 10. MULTIPLE LINEAR AND LOGISTIC REGRESSIONS
+a) Multiple linear regression
+b) Logistic regression
+
+<u>Additional materials</u>:
+
+* Field, A., Miles, J., & Field, Z. (2012). Discovering Statistics Using R. Sage: UK.
+* Navarro, D. J. (2014). Learning statistics with R: A tutorial for psychology students and other beginners. Available online: http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf
+* Verzani, J. (2014). Using R for Introductory Statistics (2. edice). Chapman & Hall: Boca Raton
+
+##### 11. MULTILEVEL AND MIXED MODELS
+a) Introduction to multilevel and mixed models
+b) Linear mixed-effect models
+c) Generalized linear mixed-effect models
+d) Repeated Measures
+
+<u>Additional materials</u>:
+
+* Field, A., Miles, J., & Field, Z. (2012). Discovering Statistics Using R. Sage: UK.
 
 <hr />
 &nbsp;
