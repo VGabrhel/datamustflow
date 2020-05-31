@@ -6,6 +6,9 @@ output:
     theme: flatly
     highlight: monochrome
     css: ~/Desktop/Git/Webpage/datamustflow/public/css/coder.min.a4f332213a21ce8eb521670c614470c58923aaaf385e2a73982c31dd7642decb.css
+    toc: true
+    toc_depth: 5
+    toc_float: true
 ---
 
 # Course characteristic
@@ -18,17 +21,15 @@ Last but not least, I would like you to have fun. Learning something like doing 
 
 So, what exactly can you expect?
 
-
-# Covered topics:
-
-01. PROGRAMMING LANGUAGE R
+# Covered topics
+##### 01. PROGRAMMING LANGUAGE R
 
 a) Conceptual introduction to R
-b) Installing R and RStudio, an introduction to the environment, libraries
+b) Installing R and RStudio, an introduction to the environment, packages
 c) Fundamentals – using R as a calculator, assigning values to objects, objects classes
 d) Coding etiquette
 
-<u>Recomended reading</u>:
+<u>Additional materials</u>:
 
 * Muenchen, R. A. (2011). R for SAS and SPSS Users. Springer: New York.
 * Norman, M. (2011). The Art of R Programming. No Starch Press: San Francisco.
@@ -38,6 +39,33 @@ d) Coding etiquette
 * R basics, workspace and working directory, RStudio projects – http://stat545.com/block002_hello-rworkspace-wd-project.html
 * RStudio IDE Cheat Sheet – https://www.rstudio.com/wp-content/uploads/2016/01/rstudio-IDE-cheatsheet.pdf
 * Base R Cheat Sheet – https://www.rstudio.com/wp-content/uploads/2016/05/base-r.pdf
+
+##### 02. DATA OBJECTS AND CLASSES
+
+a) Vector
+b) Matrix
+c) Factors
+d) Data Frames
+e) Lists
+
+<u>Additional materials</u>:
+
+* Muenchen, R. A. (2011). R for SAS and SPSS Users. Springer: New York.
+* Navarro, D. J. (2014). Learning statistics with R: A tutorial for psychology students and other beginners. Available online: http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf
+* Norman, M. (2011). The Art of R Programming. No Starch Press: San Francisco.
+
+##### 03. DATA IMPORT
+a) .csv
+b) .txt
+c) .xlsx
+d) .sav
+
+<u>Additional materials</u>:
+
+Muenchen, R. A. (2011). R for SAS and SPSS Users. Springer: New York.
+Navarro, D. J. (2014). Learning statistics with R: A tutorial for psychology students and other beginners.
+Available online: http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf
+Data Import : : CHEAT SHEET – https://ugoproto.github.io/ugo_r_doc/data-import.pdf
 
 <hr />
 &nbsp;
