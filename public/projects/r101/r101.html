@@ -1,12 +1,114 @@
 <!DOCTYPE html>
+<html lang="en">
 
-<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<head>
+    <meta name="author" content="Vit Gabrhel">
+    <meta name="description" content="Vit Gabrhel&#39;s personal website">
+    <meta name="keywords" content="blog,developer,personal">
 
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Data Must Flow"/>
+<meta name="twitter:description" content="Vit Gabrhel&#39;s personal website"/>
+
+    <meta property="og:title" content="Data Must Flow" />
+<meta property="og:description" content="Vit Gabrhel&#39;s personal website" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="/" />
+<meta property="og:updated_time" content="2020-04-26T00:00:00+00:00" />
+<html lang="en">
+
+    
+      <base href="/r101/r101.html">
+    
+    <title>
+  CV · Data Must Flow
+</title>
+    
+      <link rel="canonical" href="/r101/r101.html">
+    
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+
+    
+      
+      
+      <link rel="stylesheet" href="/css/coder.min.a4f332213a21ce8eb521670c614470c58923aaaf385e2a73982c31dd7642decb.css" integrity="sha256-pPMyITohzo61IWcMYURwxYkjqq84XipzmCwx3XZC3ss=" crossorigin="anonymous" media="screen" />
+    
+
+
+    <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
+
+    <meta name="generator" content="Hugo 0.69.0" />
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-167990948-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-167990948-1');
+    </script>
+
+  </head>
+
+  
+  
+  <body class="colorscheme-light">
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      Data Must Flow
+    </a>
+    
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="/about/about.html">About</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="/post/">Blog</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="/projects/projects.html">Projects</a>
+          </li>
+          
+          <li class="navigation-item">
+            <a class="navigation-link" href="/cv/cv.html">CV</a>
+          </li>
+              
+          <li class="navigation-item">
+            <a class="navigation-link" href="/contact/contact.html">Contact</a>
+          </li>
+        
+            
+        <!--      <li class="navigation-item menu-separator">
+                <span>|</span>
+              </li>
+              
+            
+            <li class="navigation-item">
+              <a href="/pt-br/about/">Česky</a>
+            </li>
+          -->
+        
+      
+    </ul>
+    
+  </section>
+</nav>
 
 
 
@@ -1500,8 +1602,8 @@ div.tocify {
 
 <div id="course-characteristic" class="section level1">
 <h1>Course characteristic</h1>
-<p>This course has three main goals. The first is to reduce the degree of dependence (ideally to eliminate it) from paid statistical software, which may be unavailable for financial reasons and which provides the user with relatively limited work options.</p>
-<p>Secondly, this course aims to promote interest in R as the programming language with (almost) endless analytical possibilities and a vibrant global community.</p>
+<p>This course has three main goals. The first is to eliminate dependence on paid statistical software, which may be unavailable for financial reasons and which provides the user with relatively limited work options.</p>
+<p>Secondly, this course aims to promote interest in R as the programming language with (almost) endless analytical possibilities and vibrant global community.</p>
 <p>Last but not least, I would like you to have fun. Learning something like doing data analysis in R may not be easy. However, it could be quite enjoyable too. I admire <a href="https://www.discoveringstatistics.com/">Andy Field</a> for his humorous, yet comprehensive way of teaching complex abstract topics such as factor rotation. My humble aspiration is to make learning R joyful, even if for a bit.</p>
 <p>So, what exactly can you expect?</p>
 </div>
@@ -1543,8 +1645,8 @@ div.tocify {
 <li>Norman, M. (2011). The Art of R Programming. No Starch Press: San Francisco.</li>
 </ul>
 </div>
-<div id="data-import" class="section level5">
-<h5>03. DATA IMPORT</h5>
+<div id="importing-data" class="section level5">
+<h5>03. IMPORTING DATA</h5>
 <ol style="list-style-type: lower-alpha">
 <li>.csv</li>
 <li>.txt</li>
@@ -1552,7 +1654,121 @@ div.tocify {
 <li>.sav</li>
 </ol>
 <p><u>Additional materials</u>:</p>
-<p>Muenchen, R. A. (2011). R for SAS and SPSS Users. Springer: New York. Navarro, D. J. (2014). Learning statistics with R: A tutorial for psychology students and other beginners. Available online: <a href="http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf" class="uri">http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf</a> Data Import : : CHEAT SHEET – <a href="https://ugoproto.github.io/ugo_r_doc/data-import.pdf" class="uri">https://ugoproto.github.io/ugo_r_doc/data-import.pdf</a></p>
+<ul>
+<li>Muenchen, R. A. (2011). R for SAS and SPSS Users. Springer: New York.</li>
+<li>Navarro, D. J. (2014). Learning statistics with R: A tutorial for psychology students and other beginners. Available online: <a href="http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf" class="uri">http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf</a></li>
+<li>Data Import : : CHEAT SHEET – <a href="https://ugoproto.github.io/ugo_r_doc/data-import.pdf" class="uri">https://ugoproto.github.io/ugo_r_doc/data-import.pdf</a></li>
+</ul>
+</div>
+<div id="cleaning-data" class="section level5">
+<h5>04. CLEANING DATA</h5>
+<ol style="list-style-type: lower-alpha">
+<li>Messy data, tidy data</li>
+<li>Date and time, strings</li>
+<li>Missing values, outliers, errors</li>
+</ol>
+<p><u>Additional materials</u>:</p>
+<ul>
+<li>Muenchen, R. A. (2011). R for SAS and SPSS Users. Springer: New York.</li>
+<li>Navarro, D. J. (2014). Learning statistics with R: A tutorial for psychology students and other beginners. Available online: <a href="http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf" class="uri">http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf</a></li>
+<li>Norman, M. (2011). The Art of R Programming. No Starch Press: San Francisco.</li>
+</ul>
+</div>
+<div id="wrangling-data-tidyverse" class="section level5">
+<h5>05. WRANGLING DATA (TIDYVERSE)</h5>
+<ol style="list-style-type: lower-alpha">
+<li>tbl</li>
+<li>select, mutate</li>
+<li>filter, arrange</li>
+<li>summarise, %&gt;%</li>
+<li>group_by</li>
+</ol>
+<p><u>Additional materials</u>:</p>
+<ul>
+<li>Data Wrangling with dplyr and tidyr Cheat Sheet – <a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf" class="uri">https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf</a></li>
+</ul>
+</div>
+<div id="exploring-data" class="section level5">
+<h5>06. EXPLORING DATA</h5>
+<ol style="list-style-type: lower-alpha">
+<li>Categorical data</li>
+<li>Continuous data</li>
+</ol>
+<p><u>Additional materials</u>:</p>
+<ul>
+<li>Muenchen, R. A. (2011). R for SAS and SPSS Users. Springer: New York.</li>
+<li>Navarro, D. J. (2014). Learning statistics with R: A tutorial for psychology students and other beginners. Available online: <a href="http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf" class="uri">http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf</a></li>
+<li>Norman, M. (2011). The Art of R Programming. No Starch Press: San Francisco.</li>
+</ul>
+</div>
+<div id="visualisations" class="section level5">
+<h5>07. VISUALISATIONS</h5>
+<ol style="list-style-type: lower-alpha">
+<li>Bar chart</li>
+<li>Histogram</li>
+<li>Boxplot</li>
+<li>Error bar</li>
+<li>Scatterplot</li>
+<li>Pirate plot</li>
+</ol>
+<p><u>Additional materials</u>:</p>
+<ul>
+<li>Kabacoff, R. I. (2011). R in Action Data analysis and graphics with R. Manning: Shelter Island.</li>
+<li>Wickham, H. (2009). ggplot2: Elegant Graphics for Data Analysis. Available online: <a href="http://moderngraphics11.pbworks.com/f/ggplot2-Book09hWickham.pdf" class="uri">http://moderngraphics11.pbworks.com/f/ggplot2-Book09hWickham.pdf</a>.</li>
+<li>Data Visualization with ggplot2 Cheat Sheet – <a href="https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf" class="uri">https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf</a></li>
+</ul>
+</div>
+<div id="group-comparisons" class="section level5">
+<h5>08. GROUP COMPARISONS</h5>
+<ol style="list-style-type: lower-alpha">
+<li>t-test (one-sample, two independent and two dependent samples), Student’s and Welch’s t-test</li>
+<li>ANalysis Of VAriance (ANOVA)</li>
+</ol>
+<p><u>Additional materials</u>:</p>
+<ul>
+<li>Field, A., Miles, J., &amp; Field, Z. (2012). Discovering Statistics Using R. Sage: UK.</li>
+<li>Lakens, D. (n.d.). The perfect t-test. Staženo dne 8. 10. 2016. Dostupné online na: <a href="http://daniellakens.blogspot.cz/2015/05/the-perfect-t-test.html" class="uri">http://daniellakens.blogspot.cz/2015/05/the-perfect-t-test.html</a></li>
+<li>Navarro, D. J. (2014). Learning statistics with R: A tutorial for psychology students and other beginners. Available online: <a href="http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf" class="uri">http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf</a></li>
+<li>Verzani, J. (2014). Using R for Introductory Statistics (2. edice). Chapman &amp; Hall: Boca Raton.</li>
+</ul>
+</div>
+<div id="correlation-linear-regression" class="section level5">
+<h5>09. CORRELATION, LINEAR REGRESSION</h5>
+<ol style="list-style-type: lower-alpha">
+<li>Correlation (Pearson’s r, Spearman’s rho, Kendall’s tau)</li>
+<li>Linear regression</li>
+</ol>
+<p><u>Additional materials</u>:</p>
+<ul>
+<li>Field, A., Miles, J., &amp; Field, Z. (2012). Discovering Statistics Using R. Sage: UK.</li>
+<li>Navarro, D. J. (2014). Learning statistics with R: A tutorial for psychology students and other beginners. Available online: <a href="http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf" class="uri">http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf</a></li>
+</ul>
+</div>
+<div id="multiple-linear-and-logistic-regressions" class="section level5">
+<h5>10. MULTIPLE LINEAR AND LOGISTIC REGRESSIONS</h5>
+<ol style="list-style-type: lower-alpha">
+<li>Multiple linear regression</li>
+<li>Logistic regression</li>
+</ol>
+<p><u>Additional materials</u>:</p>
+<ul>
+<li>Field, A., Miles, J., &amp; Field, Z. (2012). Discovering Statistics Using R. Sage: UK.</li>
+<li>Navarro, D. J. (2014). Learning statistics with R: A tutorial for psychology students and other beginners. Available online: <a href="http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf" class="uri">http://www.fon.hum.uva.nl/paul/lot2015/Navarro2014.pdf</a></li>
+<li>Verzani, J. (2014). Using R for Introductory Statistics (2. edice). Chapman &amp; Hall: Boca Raton</li>
+</ul>
+</div>
+<div id="multilevel-and-mixed-models" class="section level5">
+<h5>11. MULTILEVEL AND MIXED MODELS</h5>
+<ol style="list-style-type: lower-alpha">
+<li>Introduction to multilevel and mixed models</li>
+<li>Linear mixed-effect models</li>
+<li>Generalized linear mixed-effect models</li>
+<li>Repeated Measures</li>
+</ol>
+<p><u>Additional materials</u>:</p>
+<ul>
+<li>Field, A., Miles, J., &amp; Field, Z. (2012). Discovering Statistics Using R. Sage: UK.</li>
+</ul>
 <hr />
    
 <p style="text-align: center;">
