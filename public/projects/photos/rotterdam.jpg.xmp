@@ -6,13 +6,13 @@
     xmlns:xmp="http://ns.adobe.com/xap/1.0/"
     xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
     xmlns:darktable="http://darktable.sf.net/"
-   exif:DateTimeOriginal="2018:09:22 16:10:39"
+   exif:DateTimeOriginal="2019:08:21 17:05:49"
    xmp:Rating="1"
-   xmpMM:DerivedFrom="iceland.jpg"
+   xmpMM:DerivedFrom="rotterdam.jpg"
    darktable:xmp_version="3"
    darktable:raw_params="0"
    darktable:auto_presets_applied="1"
-   darktable:history_end="5"
+   darktable:history_end="4"
    darktable:iop_order_version="5">
    <darktable:masks_history>
     <rdf:Seq/>
@@ -61,17 +61,6 @@
       darktable:multi_name=""
       darktable:multi_priority="0"
       darktable:iop_order="16.0000000000000"
-      darktable:blendop_version="9"
-      darktable:blendop_params="gz11eJxjYGBgkGAAgRNODGiAEV0AJ2iwh+CRyscOAAdeGQQ="/>
-     <rdf:li
-      darktable:num="4"
-      darktable:operation="bilat"
-      darktable:enabled="1"
-      darktable:modversion="3"
-      darktable:params="01000000d7a3f03e0000003f0000803e0000003f"
-      darktable:multi_name=""
-      darktable:multi_priority="0"
-      darktable:iop_order="53.0000000000000"
       darktable:blendop_version="9"
       darktable:blendop_params="gz11eJxjYGBgkGAAgRNODGiAEV0AJ2iwh+CRyscOAAdeGQQ="/>
     </rdf:Seq>
