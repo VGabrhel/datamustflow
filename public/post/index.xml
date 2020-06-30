@@ -13,10 +13,10 @@
      
     <item>
       <title> Getting started with generative art in R</title>
-      <link>/posts/intro-generative-art/</link>
+      <link>/posts/intro-generative-art-r/</link>
       <pubDate>14 June 2020 00:00:00 +0000</pubDate>
       
-      <guid>/posts/intro-generative-art/</guid>
+      <guid>/posts/intro-generative-art-r/</guid>
       <description>In this article, I am going to present to you some of the “ready-to-use” packages for making generative art. 
       Also, I will tap into some of the examples of using general packages or libraries to arrive at the same goal.</description>
     </item>
