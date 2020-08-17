@@ -1,0 +1,311 @@
+---
+title: "Python done the R (Markdown) way"
+author: "Vit Gabrhel"
+output:
+  html_notebook:
+    allign: right
+    theme: flatly
+    highlight: monochrome
+    css: ~/Desktop/Git/Personal/datamustflow/public/css/coder.min.a4f332213a21ce8eb521670c614470c58923aaaf385e2a73982c31dd7642decb.css
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+---
+
+# Introduction
+
+Starting to work with a new tool may not be easy, especially when that *"tool"* means a new programming language. At the same time, there might be an opportunity to build upon something already known and so make the transition smoother and less painful.
+
+In my case, it was the transition from **R** to **Python**. Unfortunately, my former colleagues, pythonians, did not share my genuine fondness of R. Also, whether R enthusiasts like it or not, **Python** is a widely used tool in data analysis/engineering/science and beyond. So, I concluded that learning at least some Python is a reasonable thing to do.
+
+For me, the first steps were maybe the most difficult ones. Residing in the comfort of *RStudio*, IDEs like *Pycharm* or *Atom* did not feel familiar. This experience led to the decision to begin in the well-known environment and test its limits when it comes to working with Python.
+
+To tell the truth, I did not end up using *RStudio* as the weapon of choice for using Python in a general setting. Hopefully, the following text will deliver the message why. However, I am convinced that for some use-cases, like integrating R and Python in an ad hoc analysis R Markdown way, *RStudio* still represents a viable way to go.
+
+More importantly, it could be a convenient **starting line** for people with the **primary background in R**.
+
+So, what did I find?
+
+# Analysis
+
+## Packages and environment
+
+First of all, let us set the environment and load the required packages.
+
+* **Global environment:**
+```{r}
+# Globally round numbers at decimals
+options(digits=2)
+
+# Force R to use regular numbers instead of using the e+10-like notation
+options(scipen = 999)
+```
+
+* **R libraries:**
+```{r, message=FALSE}
+# Load the required packages. 
+# If these are not available, install them first.
+ipak <- function(pkg){
+  new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+  if (length(new.pkg)) 
+    install.packages(new.pkg, 
+                     dependencies = TRUE)
+  sapply(pkg, 
+         require, 
+         character.only = TRUE)
+}
+
+packages <- c("tidyverse", # Data wrangling
+              "gapminder", # Data source
+              "knitr", # R Markdown styling
+              "htmltools") # .html files manipulation
+
+ipak(packages)
+```
+
+In this analysis, I will be working with the `reticulate` [library](https://rstudio.github.io/reticulate/), a package developed at RStudio. However, feel free to look for [alternatives](https://www.datacamp.com/community/tutorials/using-both-python-r).
+
+Also, I am going to import the `reticulate` package separately for the purposes of a clearer flow.
+
+* **Python activation:**
+```{r, message=FALSE,  warning=FALSE} 
+# The "weapon of choice"
+library(reticulate)
+
+# Specifying which version of python to use.
+use_python("/home/vg/anaconda3/bin/python3.7", 
+           required = T) # Locate and run Python
+```
+
+* **Python libraries:**
+```{python, message=FALSE, warning=FALSE}
+import pandas as pd # data wrangling
+import numpy as np # arrays, matrices, math
+import statistics as st # functions for calculating mathematical statistics
+import plotly.express as px # plotting package
+```
+
+
+One of the limits of working with **Python** in **R** *(Studio)* is that in some cases you do not receive the Python traceback by default. That is a problem because, if I oversimplify things, a traceback helps you to identify where is the problem. Meaning it helps you fix it. So, consider it as an **error message** (or the lack of it). 
+
+* For example, when calling a library that you do not have installed, the Python chunk in R Markdown gives you green lights (so everything looks up and running), but this does not mean that the code ran the way you would expect (e.g. it imported a library).
+
+To deal with that, I suggest making sure you have your libraries installed in `Terminal`. If they are not, you can always install them and import afterwards.
+
+For example, I will first import the `json` package which is already installed on my machine. I will do so by using **Terminal** here in *RStudio*. In addition, let me try to import the `TensorFlow` [package](https://www.tensorflow.org/).
+
+From the following picture, you can see that there is no package `TensorFlow`. So, let me switch back to **bash** and install the package:
+
+```{r, echo=FALSE}
+include_graphics("/home/vg/Desktop/Git/Personal/datamustflow/public/posts/python-in-r/installing_packages.png")
+```
+
+<br>
+
+Then go to the directory where is the newly installed package `TensorFlow` installed, switch to **Python** and import the package once again:
+
+```{r, echo=FALSE}
+include_graphics("/home/vg/Desktop/Git/Personal/datamustflow/public/posts/python-in-r/loading_tensorflow.png")
+```
+<br>
+
+All right. For more information, take a look at the [Installing Python Modules](https://docs.python.org/3.4/installing/index.html) page.
+
+## Data
+
+As we now have **R** and **Python** set, let us import some data to play with. I will be working with a sample from the [Gapminder](https://www.gapminder.org/), an intriguing project  related to socio-demography of the world's population. To be more specific, I will be working with the latest available data within the [GapMinder](https://cran.r-project.org/web/packages/gapminder/README.html) library.
+
+* **Data import in R:**
+```{r}
+# Let us begin with the most recent set of data
+gapminder_latest <- gapminder %>%
+          filter(year == max(year))
+```
+
+So, now we have a data loaded in **R**. Unfortunately, it is not possible to access the **R objects** (e.g. *vectors* od *tibbles*) directly by **Python**. So, we need to **convert** the R object(s) first.
+
+* **Data import in Python:**
+
+```{python} 
+# Convert R Data Frame (tibble) into the pandas Data Frame
+gapminder_latest_py = r['gapminder_latest'] 
+```
+
+One important thing to realise when working with *Python objects* (e.g. *arrays* or `pandas` *Data Frame*) is that they are **not** [explicitly **stored** in the environment](https://community.rstudio.com/t/rstudio-ide-global-environment-variable-when-running-python/17999) as the *R objects* are. 
+
+* In other words, if we want to know what is stored in the workspace, we must call functions like `dir()`, `globals()` or `locals()`: 
+
+```{python}
+dir()
+```
+Great, among the present objects, we can clearly see the data (`gapminder_latest_py`) or libraries (e.g. `px`).
+
+So, let us explore the data a bit!
+
+## Life Expectancy
+
+For the demonstration purposes, I will focus on the [life expectancy](https://en.wikipedia.org/wiki/Life_expectancy) or the average number of years a person is expected to live.
+
+### Descriptive statistics
+
+Let's begin with calculating some **descriptive statistics** like *mean*, *median* or the *number of rows* in the data using **Python**:
+
+```{python} 
+# Descriptive statistics for the inline code in Python
+
+## Data Frame Overview
+
+### Number of rows
+gapminder_latest_shape = gapminder_latest_py.shape[0] 
+### Number of distinct values within the life expectancy variable
+gapminder_latest_count_py = gapminder_latest_py['lifeExp'].nunique()
+
+## Life Expectancy
+
+### Median (Life Expectancy)
+gapminder_latest_median_lifeExp_py = st.median(gapminder_latest_py['lifeExp']) 
+### Mean
+gapminder_latest_mean_lifeExp_py = st.mean(gapminder_latest_py['lifeExp'])
+### Minimum
+gapminder_latest_min_lifeExp_py = min(gapminder_latest_py['lifeExp']) 
+### Maximum
+gapminder_latest_max_lifeExp_py = max(gapminder_latest_py['lifeExp'])
+### Standard deviation
+gapminder_latest_stdev_lifeExp_py = st.stdev(gapminder_latest_py['lifeExp'])
+```
+
+Nice. Unfortunately, we are not able to use the **Python objects** for **inline coding**, one of the key features of [**literate coding**](https://en.wikipedia.org/wiki/Literate_programming#:~:text=Literate%20programming%20is%20a%20programming,source%20code%20can%20be%20generated.) in [*R Markdown*](https://rmarkdown.rstudio.com/lesson-4.html). So, if we want to use the results for inline codes, we need to transform the **Python objects** back to **R**: 
+
+```{r}
+# Descriptive statistics for the inline code in Python - transformed to R
+
+## Data Frame Overview
+
+## Number of rows
+gapminder_latest_nrow_r = py$gapminder_latest_shape
+### Number of distinct values within the life expectancy variable
+gapminder_latest_count_r = py$gapminder_latest_count_py
+
+## Life Expectancy
+
+### Median (Life Expectancy)
+gapminder_latest_median_lifeExp_r = py$gapminder_latest_median_lifeExp_py
+### Mean
+gapminder_latest_mean_lifeExp_r = py$gapminder_latest_mean_lifeExp_py
+### Minimum
+gapminder_latest_min_lifeExp_r = py$gapminder_latest_min_lifeExp_py
+### Maximum
+gapminder_latest_max_lifeExp_r = py$gapminder_latest_max_lifeExp_py
+### Standard deviation
+gapminder_latest_stdev_lifeExp_r = py$gapminder_latest_stdev_lifeExp_py
+```
+
+So, what can we say about **life expectancy** in **`r max(gapminder_latest$year)`**? 
+
+First of all, there were **`r gapminder_latest_nrow_r` countries** on the list. The **minimum** value of life expectancy was **`r gapminder_latest_min_lifeExp_r`** years, the maximum **`r gapminder_latest_max_lifeExp_r`** years.
+
+The **average** value for life expectancy was **`r gapminder_latest_mean_lifeExp_r`** years and **50%** or **median** hope to live **`r gapminder_latest_median_lifeExp_r`** years or more. Lastly, the standard deviation was **`r gapminder_latest_stdev_lifeExp_r`** years.
+
+### Graphs (using Plotly)
+
+Okay, let's move to something else, like graphs. 
+
+For example, we can take a look at *how is the life expectancy distributed* across the globe using `Plotly`: 
+
+```{python, echo = T}
+fig = px.histogram(gapminder_latest_py, # package.function; Data Frame
+                   x="lifeExp", # Variable on the X axis
+                   range_x=(gapminder_latest_min_lifeExp_py, 
+                            gapminder_latest_max_lifeExp_py), # Minimum and maximum values for the X axis
+                   labels={'lifeExp':'Life expectancy - in years'}, # Naming of the interactive part
+                   color_discrete_sequence=['#005C4E']) # Colour of fill 
+
+lifeExpHist = fig.update_layout(
+  title="Figure 1. Life Expectancy in 2007 Across the Globe - in Years", # The name of the graph
+  xaxis_title="Years", # X-axis title
+  yaxis_title="Count", # Y-axis title
+  font=dict( # "css"
+    family="Roboto",
+    size=12,
+    color="#252A31"
+  ))
+
+lifeExpHist.write_html("lifeExpHist.html") # Save the graph as a .html object
+```
+
+Unfortunately, it is not possible to print interactive `Plotly` graphs in **R Markdown** via **Python**. Or, to be more precise, you will receive a `Figure object` by printing (e.g. `print(lifeExpHist)`) it:
+
+```{python echo=TRUE}
+print(lifeExpHist)
+```
+So, we **import** the previously created *.html* file instead (e.g. using the `includeHTML` function from the `htmltools` package):
+
+```{r, echo=TRUE, results='hide', fig.width = 10, fig.height = 8, fig.align='center', message=FALSE, warning=FALSE, error=FALSE}
+htmltools::includeHTML("lifeExpHist.html") # Render the graph
+```
+
+So, here comes a basic, yet interactive histogram made in the Python version of `Plotly`. 
+
+However, producing this graph in **RStudio** required quite a workaround. At the same time, a size of the graphs produced this way could easily be **tens of MBs**. 
+
+* Consequently, a .html report containing such graphs would require **a lot of data to download** for a reader and it would take **more time to render the page**.
+
+### Summary tables (using pandas)
+
+One of the common use-cases for `pandas` is to provide a data description. The respective code runs just fine. However, the output cannot be styled as you are used from styling in `pandas`.
+
+* When speaking of `pandas`, we can easily create a summary table for the commonly used statistics like mean or standard deviation of **life expectancy** for **individual continents**:
+
+```{python}
+# Create a pandas Data Frame object containing the relevant variable,
+# conduct formatting.
+
+gapminder_latest_py['continent'] = gapminder_latest_py['continent'].astype(str)
+variable = 'continent'
+variable_name = 'Continents'
+
+gapminder_latest_py['lifeExp'] = gapminder_latest_py['lifeExp'].astype(int)
+variable_grouping = 'lifeExp'
+
+contact_window_days = gapminder_latest_py.groupby([
+                        pd.Grouper(key=variable)])\
+                        [variable_grouping]\
+                        .agg(['count',
+                              'min',
+                              'mean',
+                              'median',
+                              'std',
+                              'max'])\
+                        .reset_index()
+
+contact_window_days_style = contact_window_days\
+                        .rename({'count': 'Count',
+                                 'median': 'Median',
+                                 'std': 'Standard Deviation',
+                                 'min': 'Minimum', 
+                                 'max': 'Maximum',
+                                 'mean': 'Mean',}, axis='columns')
+                                 
+contact_window_days_style # print the table
+```
+Also, note that the **Python environment settings override those from R**. For example, take a look at the number of digits for Mean or Standard Deviation. There are six digits instead of two set at the beginning.
+
+# Closing remarks
+
+Okay, that's enough for now. If you are hungry for more advanced things like unsupervised learning using `scikit-learn` [package](https://scikit-learn.org/stable/) in **R**, take a [look](https://www.r-bloggers.com/r-and-python-using-reticulate-to-get-the-best-of-both-worlds/).
+
+However, before closing this post, let me just say that if you think about switching to **Python** as such and using it often, consider IDE alternatives to *RStudio*. 
+
+Many analysts swear on [**Jupyter notebooks**](https://jupyter.org/) for the interactivity, integration of `markdown` or option to run code in various languages like `R`, `Julia` or `JavaScript`. [**JupyterHub**](https://jupyter.org/hub) is a platform based on Jupyter notebooks, adding version control. Usually, users run analyses in a containerised environment). Another take on interactivity and collaboration could be [**Colab**](https://colab.research.google.com/notebooks/intro.ipynb#recent=true), basically, Jupyter notebooks running on Google Cloud.
+
+Last but not least, there is a great piece of software called [**Visual Studio Code**](https://code.visualstudio.com/). It not only allows you to create and run code in a plethora of languages or seamless flow between pure **Python** code and interactive **Jupyter notebooks**. And maybe even more importantly, it provides you with very efficient version control management (like Git integration and extensions). If you choose this IDE, you can set up [VS Code for Python development like RStudio](https://stevenmortimer.com/setting-up-vs-code-for-python-development-like-rstudio/#settings-json-file). 
+
+But no matter what path to Python you choose, don't forget that it is a tool suitable for some situations and maybe not so suitable to others. Just like R. Try to leverage the best of it while being aware of the pros of different tools. 
+
+&nbsp;
+&nbsp;
+
+<p style="text-align: center;"><b>Go back to <a href="/post">Blog</b></a></p>
