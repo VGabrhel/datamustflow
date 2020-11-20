@@ -259,7 +259,7 @@ One of the common use-cases for `pandas` is to provide a data description. The r
 
 * When speaking of `pandas`, we can easily create a summary table for the commonly used statistics like mean or standard deviation of **life expectancy** for **individual continents**:
 
-```{python}
+```{python echo=TRUE}
 # Create a pandas Data Frame object containing the relevant variable,
 # conduct formatting.
 
@@ -289,6 +289,9 @@ contact_window_days_style = contact_window_days\
                                  'max': 'Maximum',
                                  'mean': 'Mean',}, axis='columns')
                                  
+```
+
+```{python}
 contact_window_days_style # print the table
 ```
 Also, note that the **Python environment settings override those from R**. For example, take a look at the number of digits for Mean or Standard Deviation. There are six digits instead of two set at the beginning.

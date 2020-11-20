@@ -1,0 +1,108 @@
+---
+title: "Curriculum Vitae"
+author: "Vit Gabrhel"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    toc: no
+    toc_depth: '1'
+  html_notebook:
+    allign: right
+    theme: flatly
+    highlight: monochrome
+    css: ~/Desktop/Git/Personal/datamustflow/public/css/coder.min.a4f332213a21ce8eb521670c614470c58923aaaf385e2a73982c31dd7642decb.css
+    toc: yes
+    toc_depth: '1'
+---
+
+# Introduction
+
+Hi, I am a data analyst with experience in the field of travel behaviour analysis, travel demand modelling, customer experience, customer satisfaction, and product analysis. I am an independent user of statistical packages (**R, Python, Google Sheets, MS Excel**) and database quering languages/dialects (**PostgreSQL, MySQL, Snowflake, Standard SQL** in **BigQuery**) with experience in areas ranging from the data collection through its **wrangling, description, visualisation** to the advanced linear models (**regression models, PCA, SEM**). Lately, I have gained experience with data **science techniques** (like segmentation or recommendation engine) and **data engineering** areas (ETL, data models, data architecture).
+
+# Work Experience
+
+## Data Analyst
+
+Meiro, Brno, Czech Republic, *08/2020–Present*
+
+* Covered domains: *Data Engineering, Data Analysis, Data Science*.
+* **ETL pipelines management**, **Design of data models**.
+* Integrating **PostgreSQL** and **MySQL**  with **R** and **Python**, data wrangling, description, and visualization to advanced statistical techniques and data science techniques (e.g. **recommendation engine** and **customer segmentation**) in **Python** using *VS Code*. Fundamentals of **Spark**.
+* Linux desktop (Ubuntu), Bash, Git. Fundamentals of **Docker** and **CD/CI**.
+
+## Data Analyst
+Kiwi.com, Brno, Czech Republic, *04/2019–07/2020*
+
+* Covered domains: *Product, Customer Experience, Customer Support*.
+* Reports. Integrating **PostgreSQL, Snowflake**, and **BigQuery** with **R** and **Python**, data wrangling, description, and visualization to advanced statistical techniques (regression models, structural equation modelling) in R. Reporting in Markdown (**R notebooks, Jupyter Notebooks**, oral presentations).
+* Dashboards. I’m proficient in working with tools like Looker, GoodData, Google Data Studio, or Retool (Plotly).
+* Data engineering. Sense of data models and ETL self-service (Keboola, dbt).
+* Linux desktop (Ubuntu), **Bash**, **Git**.
+* **Jira**, **Scrum**.
+
+## Lecturer
+Masaryk University, Brno, Czech Republic, *09/2015–Present*
+
+* Demonstrations of analyses and their interpretations, providing oral and written feedback in the following courses:
+  * [Statistical Data Analysis I.](https://is.muni.cz/course/fss/spring2018/PSY117)
+    * *Correlation, contingency tables, t-test, an introduction to non-parametric tests (e.g. chi-square)*.
+  * [Statistical Data Analysis II.](https://is.muni.cz/course/fss/autumn2018/PSY252)
+    * *Multiple linear regression, ANOVA, logistic regression, factor analysis, mixed effect models*.
+  * [An Introduction to R](https://is.muni.cz/course/fss/autumn2019/PSYn5320)
+    * An introduction to the **R language**, *data cleaning, wrangling, description and visualization, multivariate analyses in the R language.*
+
+## Researcher
+Transport Research Centre, Brno, Czech Republic, *06/2015–03/2019*
+
+* Travel behaviour analyses, coordination of research activities, communication with the lay public as well as the [community of experts](https://link.springer.com/article/10.1007/s12544-018-0286-8).
+* Investigator in the project [Česko v pohybu](https://www.ceskovpohybu.cz/). Development of the research tool, development and implementation of the probabilistic sampling procedure and algorithms for automated control of the data quality.
+* Methodological and analytical supervision of the research project for the Czech Ministry of Transport related to the [Public opinion on autonomous vehicles](https://tots.upol.cz/artkey/tot-201902-0004_public-opinion-on-connected-and-automated-vehicles-the-czech-context.php).
+* Project management of small project teams, e.g. program section for the conference [Dopravní chování v datech](https://www.cdv.cz/konference-dopravni-chovani-v-datech-2018/).
+
+# Education
+
+## Psychology (Ph.D.)
+Masaryk University, Brno, Czech Republic, *09/2015–Present*
+
+* Specialisation in advanced analytical methods – [structural equation modelling](https://digitalcommons.ciis.edu/cgi/viewcontent.cgi?article=1516&context=ijts-transpersonalstudies), [multinomial regression](https://www.tots.upol.cz/pdfs/tot/2019/01/03.pdf).
+* Member of the *Disciplinary Committee — Faculty of Social Studies*.
+
+## Psychology (Master degree)
+Masaryk University, Brno, Czech Republic, *2013–2015*
+
+* Specialisation in **frequentist statistics**, introduction to Bayesian statistics.
+* Scholarship for excellent performance in research activities given by the Faculty of Social Studies during the academic year 2013/2014.
+* Thesis: [Student Styles Questionnaire in the Czech context: A pilot study]()
+* Graduated with [honours](https://is.muni.cz/student/vystavene_znamky?lang=en;studium_osoby=665097).
+
+## Psychology and Sociology (Bachelor degree)
+Masaryk University, Brno, Czech Republic, *2010–2013*
+
+Specialisation in quantitative methodology and statistical data analysis in IBM SPSS with focus on linear models.
+Scholarship for best students of Faculty of Social Studies during the academic years 2010/2011 and 2011/2012.
+Thesis: The relationship between spirituality and autonomy in late adolescence and emerging adulthood.
+Graduated with honours.
+
+# Internships
+Danmarks Tekniske Universitet, Management Engineering, Lyngby, Denmark. *08-09/2017*
+
+Corpus Christi College, University of Cambridge, Cambridge, UK. *07-09/2015*
+
+# Selected publications
+
+* Gabrhel, V., Ježek, S. (2017). Factor validity and internal consistency of the Expressions of Spirituality Inventory – Revised (ESI-R): The Czech context. International Journal of Transpersonal Studies, 36 (1), 101-109. doi:10.24972/ijts.2017.36.1.101.
+* Gabrhel, V. (2019). Feeling like cycling? Psychological factors related to cycling as a mode choice. Transactions on Transport Sciences, 10 (1). doi:10.1007/978-3-319-60441-1_80
+* Gabrhel, V., Ježek, S., Havlíčková, D. (2019). Public opinion on connected and automated vehicles: the Czech context. Transactions on Transport Sciences, 10 (2). doi:10.5507/tots.2019.011
+* Havlíčková, D., Gabrhel, V., Adamovská, E., Zámečník, P. (2019). The role of gender and age in autonomous mobility: general attitude, awareness and media preference in the context of Czech Republic. Transactions on Transport Sciences, 10 (2). doi:10.5507/tots.2019.013
+* Jakopec, A., Gabrhel, V., Keane, L., Kovač, N., Reigbert, K., Andersen, T. L. (2015). Work Engagement and Performance: Does the (Mis)Alignment of Justice Sources Matter? Journal of European Psychology Students, 6 (2), 75–78. doi:10.5334/jeps.cs.
+* Kurečková, V., Gabrhel, V., Zámečník, P., et al. (2017) First aid as an important traffic safety factor – evaluation of the experience–based training. European Transport Research Review, 9 (5). doi:10.1007/s12544-016-0218-4/
+* Šimeček, M., Gabrhel, V., Tögel, M., & Lazor, M. (2018). Travel behaviour of seniors in Eastern Europe: a comparative study of Brno and Bratislava. European Transport Research Review, 10 (16), 1-8. doi:10.1007/s12544-018-0286-8
+* Švarcová, J., Gabrhel, V. (2014). Educational Mobility and Educational Aspirations of High School Students in the Czech Republic. The International Journal of Interdisciplinary Educational Studies, 8 (2), 1-12.
+* Švarcová, J., Harantová, L., & Gabrhel, V. (2013). Statistical analysis of student’s interest in creative professions in the Czech Republic. International Journal of Mathematical Models and Methods in Applied Sciences, 7 (2), 444-451.
+
+# Selected talks
+
+* Gabrhel, V., Šenk, P., Lazor, M., & Ondráčková, J. (2016). Travel Behavior in Central and Eastern Europe: a Bratislava Case Study. Paper presented at the World Conference on Transport Research – WCTR 2016 Shanghai in Shanghai, People’s Republic of China.
+* Gabrhel, V. (2018). Public opinion on automated vehicles: the Czech context. Paper presented at the conference Silniční konference 2018 in Ostrava, Czech Republic.
+* Gabrhel, V., Zámečník, P. (2018). Concerns related to the interaction between autonomous vehicles and other transport systém users. Paper presented at the conference Road Safety on Five Continents in Jeju, Republic of Korea.
+* Šimeček, M., Gabrhel, V., Togel, M., & Lazor, M. (2016). Travel behaviour of seniors in Central Europe: a comparative study of Brno and Bratislava. Paper presented at the conference NECTAR Joint Cluster 2 and Cluster 3 International Workshop “The role of planning towards sustainable urban mobility” in Brno, Czech Republic.
