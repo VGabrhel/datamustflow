@@ -1,0 +1,705 @@
+---
+title: "Psychoterapie - Národní registr poskytovatelů zdravotních služeb"
+output: 
+  flexdashboard::flex_dashboard:
+    social: menu
+    source_code: embed
+    css: ~/Desktop/Git/Personal/datamustflow/public/css/coder.min.a4f332213a21ce8eb521670c614470c58923aaaf385e2a73982c31dd7642decb.css
+    theme: bootstrap
+---
+
+```{r setup, include=FALSE}
+# Load required packages
+library(flexdashboard) # dashboard wrapping
+library(readxl) # data import
+library(stringr) # string manipulation
+library(tidyverse) # data wrangling
+library(tidygeocoder) # geocoding
+library(crosstalk) # interactivity
+library(highcharter) # charts
+library(broom) #output of built-in functions cleanup
+library(jsonlite) # json wrangling
+library(geojsonR) # geojson wrangling
+library(DT) # Table formatting
+library(leaflet) # maps
+library(leaflet.extras) # map tweaks
+library(htmltools) # widgets
+```
+
+```{r, warning=FALSE, message=FALSE}
+# Data import
+
+## Uzis (https://nrpzs.uzis.cz/index.php?pg=home--download)
+uzis_psychotherapy = read.csv2("uzis.csv", fileEncoding = "windows-1250") %>% # due to the encoding style
+                    distinct(NazevCely, DruhZarizeni, Obec, PscSidlo, Ulice, 
+                             CisloDomovniOrientacni, Kraj, Okres, 
+                             PoskytovatelTelefon, PoskytovatelEmail, 
+                             PoskytovatelWeb,DruhPoskytovatele, OborPece, 
+                             KrajKod, GPS, FormaPece) %>% #
+                    filter(str_detect(OborPece, "psychiatrie|psycholog")) %>%
+                    mutate_all(list(~na_if(.,""))) %>%
+                    rename("psc" = "PscSidlo",
+                           Obor = OborPece,
+                           Telefon = PoskytovatelTelefon,
+                           Email = PoskytovatelEmail,
+                           `LAU 1` = KrajKod)
+
+## Address variable (CisloDomovniOrientacni) cleanup
+uzis_psychotherapy$CisloDomovniOrientacni <- stringr::str_replace(uzis_psychotherapy$CisloDomovniOrientacni,
+                                                               '\\.0',
+                                                               '')
+
+# NUTS (https://www.czso.cz/csu/czso/i_zakladni_uzemni_ciselniky_na_uzemi_cr_a_klasifikace_cz_nuts)
+nuts_cz <- read_excel("nuts_cz.xlsx",
+                      skip = 1,
+                      sheet = "1.1.2020") %>%
+            select(c("název...2",
+                     "status",
+                     "název...9",
+                     "název...11",
+                     "kód...1"
+            )) %>%
+            rename("Obec" = "název...2",
+                   "Okres" = "název...9",
+                   "Kraj" = "název...11",
+                   "kodobce" = "kód...1")
+
+## CSU - Inhabitants in the Czech Republic (2020-01-01)
+csu_inhab_2020 <-read_excel('csu_obyv_2020.xlsx',
+                            skip = 5) %>%
+                rename(Obec = `...3`,
+                       kodobce = `LAU 2`)
+
+## PSC - connection point between towns/regions/psc
+psc <- read_excel('xls_cobce_psc.xls') %>%
+        rename("Obec" = "nazobce",
+               Okres = nazokresu) %>%
+        distinct(psc, Okres, Obec, kodobce)
+```
+
+```{r}
+# Wrangling
+
+## Concat to address
+uzis_psychotherapy <-uzis_psychotherapy %>%
+                    unite(adresa,
+                          sep = ", ",
+                          c("Ulice",
+                            "CisloDomovniOrientacni",
+                            "psc",
+                            "Obec"),
+                          remove = FALSE)
+
+## Remove NAs
+uzis_psychotherapy$adresa <- str_replace(uzis_psychotherapy$adresa, # String
+                                      ", NA,", # Patten
+                                      "") # Replacement
+
+## Join with PSC to make a connection point for
+uzis_psychotherapy_psc <- uzis_psychotherapy %>%
+                        mutate(Obec = case_when(str_detect(Obec, "^Praha") ~ "Praha", # merge city parts into Prague
+                                                TRUE ~ uzis_psychotherapy$Obec))  %>%
+                        left_join(psc, by = c("Obec", "Okres", "psc")) %>%
+                        mutate(kodobce = as.character(kodobce))
+
+## Join with NUTS and CSU data on inhabitants
+uzis_psychotherapy_nuts <- uzis_psychotherapy_psc %>%
+                          left_join(nuts_cz, by = c('Kraj','Okres', 'Obec')) %>%
+                          mutate(psc  = as.character(psc),
+                                 kodobce = case_when(!is.na(kodobce.x) ~ kodobce.x,
+                                                     Obec == "Praha" ~ "554782",
+                                                     Obec == "Slavkov u Brna" ~ "593583",
+                                                     TRUE ~ kodobce.y),
+                                 Kraj = case_when(Obec == "Praha" ~ "Hlavní město Praha",
+                                                  Obec == "Slavkov u Brna" ~ "Jihomoravský kraj",
+                                                  TRUE ~ Kraj)) # create "city code" based on both datasets and some manual inputs 
+
+## Final table
+uzis_psychotherapy_csu <- uzis_psychotherapy_nuts %>%
+                        left_join(csu_inhab_2020, by = c("Obec", "kodobce")) 
+```
+
+
+**Úvod**
+=====================================  
+
+Inputs {.sidebar data-width="20%", align=block}
+-------------------------------------
+
+#### *Veřejná péče o duševní zdraví*
+
+Tato analýza představuje veřejně dostupná data o kapacitě státem organizované péče o duševní zdraví.
+
+Když je řeč o péči o duševní zdraví, můžeme si představit její různé podoby. Například *krizovou intervenci* nebo *párové poradenství*. V této analýze mám na mysli **psychoterapii**, které se věnují jak psychologové či psychoterapeuti v soukromé praxi, tak psychologové ve zdravotnictví. 
+
+Psychologožky (psychiatričky) a psychologové (psychiatři) ve zdravotnictví zpravidla nevykonávají jen psychoterapii, nicméně právě je můžeme chápat jako "**registrované poskytovatele zdravotní péče**". A tento status je důležitý proto, že umožňuje služby takového poskytovatele [hradit skrze zdravotní pojištění](http://www.psychoterapeuti.cz/pro-klienty-psychoterapie). Na rozdíl od psychologů poskytující psychoterapii *"na soukromo"*, bez smlouvy s některou zdravotní pojišťovnou. Služby psychologů a psychiatrů psychoterapeuticky pracujících ve zdravotnictví tedy představují kapacitu státem garantované péče v tomto smyslu.
+
+Column {data-width="30%"}
+-------------------------------------
+
+### **Registrovaných poskytovatelů<br> zdravotní péče v oblasti psychologie**
+
+```{r}
+articles <- nrow(uzis_psychotherapy_psc)
+valueBox(articles, icon = "fas fa-first-aid", color = "info")
+```
+
+### **V kolika obcích najdeme<br> registrované poskytovatele?**
+<br>
+<br>
+
+```{r}
+city <- nrow(distinct(uzis_psychotherapy_psc, Obec))
+total <- nrow(nuts_cz)
+city_percent <- round((city/total)*100,2)
+city_figure <- paste(city, "(", city_percent, '% )')
+
+
+valueBox(city_figure, icon = "far fa-building", color = "info")
+``` 
+
+### **Kolik poskytovatelů má uvedený<br> telefonní kontakt?**
+<br>
+<br>
+
+```{r}
+call <- nrow(filter(uzis_psychotherapy_psc, !is.na(Telefon)))
+total <- nrow(uzis_psychotherapy_psc)
+call_percent <- round((call/total)*100,2)
+call_figure <- paste(call, "(", call_percent, '% )')
+
+valueBox(call_figure, icon = "fas fa-phone", color = "info")
+``` 
+
+### **Kolik poskytovatelů má uvedený<br> emailový kontakt?**
+
+```{r}
+email <- nrow(filter(uzis_psychotherapy_psc, !is.na(Email)))
+total <- nrow(uzis_psychotherapy_psc)
+email_percent <- round((email/total)*100,2)
+
+email_figure <- paste(email, "(", email_percent, '% )')
+
+valueBox(email_figure, icon = "far fa-envelope", color = "info")
+``` 
+
+Column {.tabset data-width=1000}
+-------------------------------------
+   
+### **Poskytovatelé zdravotní péče dle oboru**
+
+```{r}
+keywords <- uzis_psychotherapy_psc %>%
+              select(NazevCely, Obor) %>%
+              mutate(name=strsplit(Obor, ", ")) %>% 
+              unnest(name) %>%
+              count(name) %>%
+              filter(str_detect(name, "psychiatrie|psycholog")) %>%
+              arrange(desc(n)) %>%
+              rename(`Obor` = "name",
+                     Počet = n) %>%
+              mutate(`%` = round(Počet/sum(Počet) * 100,2)) %>%
+              hchart('column', hcaes(x = Obor, y = 'Počet')) %>%
+              hc_colorAxis(stops = color_stops()) %>%
+              hc_tooltip(pointFormat = "{point.Počet} ({point.%}%)") %>%
+              hc_chart(style = list(
+                                    fontWeight = "bold",
+                                    fontSize = 16)) %>%
+              hc_add_theme(hc_theme_ffx()) %>%
+              hc_legend(align = "center") %>%
+              hc_title(text = "Počet registrovaných poskytovatelů zdravotní péče dle oborů")
+
+keywords
+```
+ 
+### **Poskytovatelé zdravotní péče dle formy péče**
+
+```{r}
+pece <- uzis_psychotherapy_psc  %>%
+              filter(str_detect(Obor, "psychiatrie|psycholog")) %>%
+              select(NazevCely, FormaPece) %>%
+              mutate(name=strsplit(FormaPece, ", ")) %>%
+              unnest(name) %>%
+              count(name) %>%
+              arrange(desc(n)) %>%
+              rename(`Forma péče` = "name",
+                     Počet = n) %>%
+              mutate(`Forma péče` = case_when(is.na(`Forma péče`) ~ "Neuvedeno",
+                                              TRUE ~ `Forma péče`)) %>%
+              mutate(`%` = round(Počet/sum(Počet) * 100,2)) %>%
+              hchart('bar', hcaes(x = `Forma péče`, y = 'Počet')) %>%
+              hc_colorAxis(stops = color_stops()) %>%
+              hc_tooltip(pointFormat = "{point.Počet} ({point.%}%)") %>%
+              hc_chart(style = list(
+                                    fontWeight = "bold",
+                                    fontSize = 16)) %>%
+              hc_add_theme(hc_theme_ffx()) %>%
+              hc_legend(align = "center") %>%
+              hc_title(text = "Poskytovatelé zdravotní péče dle formy péče")
+
+pece
+```
+
+### **Poskytovatelé zdravotní péče dle druhu zařízení**
+
+```{r}
+druh_zarizeni_graf <-  uzis_psychotherapy_psc %>%
+              select(NazevCely, DruhZarizeni) %>%
+              count(DruhZarizeni) %>%
+              arrange(desc(n)) %>%
+              rename(`Druh zařízení` = "DruhZarizeni",
+                     Počet = n) %>%
+              mutate(`Druh zařízení` = case_when(`Druh zařízení` == "" ~ "Neuvedeno",
+                                              TRUE ~ `Druh zařízení`)) %>%
+              mutate(`%` = round(Počet/sum(Počet) * 100,2)) %>%
+              slice_max(`Počet`, n = 15) %>%
+              hchart('bar', hcaes(x = `Druh zařízení`, y = 'Počet')) %>%
+              hc_colorAxis(stops = color_stops()) %>%
+              hc_tooltip(pointFormat = "{point.Počet} ({point.%}%)") %>%
+              hc_chart(style = list(
+                                    fontWeight = "bold",
+                                    fontSize = 16)) %>%
+              hc_add_theme(hc_theme_ffx()) %>%
+              hc_legend(align = "center") %>%
+              hc_title(text = "Poskytovatelé zdravotní péče dle druhu zařízení (15 nejčastějších)")
+
+druh_zarizeni_graf
+```
+
+**Prostorově**
+=====================================  
+
+Inputs {.sidebar .tabset data-width=600, align=block}
+-------------------------------------
+
+```{r, warning=FALSE, message=FALSE}
+# Import map of the Czech Republic and store it
+url <- "https://code.highcharts.com/mapdata/countries/cz/cz-all.geo.json"
+tmpfile <- tempfile(fileext = ".json")
+download.file(url, tmpfile, encoding = "ISO 8859-2")
+
+# Read Text Lines from a Connection
+cz <- readLines(tmpfile)
+cz <- gsub(".* = ", "", cz)
+
+# Turn to a list and 
+cz <- jsonlite::fromJSON(cz, simplifyVector = FALSE)
+x <- cz$features[[1]]
+
+#
+dfcz1 <-  cz$features %>% 
+  map_df(function(x){
+    tibble(`hc-a2` = x$properties$`hc-a2`, name = x$properties$name)
+  }) %>%  # extract the keys
+  arrange(name)
+
+# Create an object representing "Regions"
+kraj_distinct <- uzis_psychotherapy_nuts %>%
+    select(Kraj) %>%
+    distinct(Kraj) %>%
+    mutate(Kraj = case_when(Kraj == "Hlavní město Praha" ~ "Praha",
+                            Kraj == "Kraj Vysočina" ~ "Vysočina",
+                            TRUE ~ Kraj)) %>%
+    filter(!is.na(Kraj)) %>%
+    arrange(Kraj)
+
+# The distribution of therapists in regions
+therapist_by_kraj <- uzis_psychotherapy_csu %>%
+  select(Kraj) %>%
+  filter(!is.na(Kraj)) %>%
+  group_by(Kraj) %>%
+  summarise(n = n()) %>%
+  mutate(percent = round(n / sum(n)*100,2)) %>%
+  mutate(Kraj = case_when(Kraj == "Hlavní město Praha" ~ "Praha",
+                            Kraj == "Kraj Vysočina" ~ "Vysočina",
+                            TRUE ~ Kraj)) %>%
+  
+  arrange(Kraj) %>%
+  rename(Kraj = Kraj)
+  
+# The distribution of population in regions
+population_by_kraj <- uzis_psychotherapy_csu %>%
+  distinct(Kraj, Total...4) %>%
+  filter(!is.na(Kraj)) %>%
+  group_by(Kraj) %>%
+  summarise(population = sum(`Total...4`)) %>%
+  mutate(percent = round(population / sum(population)*100,2)) %>%
+  mutate(Kraj = case_when(Kraj == "Hlavní město Praha" ~ "Praha",
+                            Kraj == "Kraj Vysočina" ~ "Vysočina",
+                            TRUE ~ Kraj)) %>%
+  arrange(Kraj)
+
+# therapists, population, and related metrics
+dfcz2 <- tibble(cbind(dfcz1 , kraj_distinct)) %>%
+          inner_join(therapist_by_kraj, by = "Kraj") %>%
+          inner_join(population_by_kraj, by = "Kraj") %>%
+          mutate(psycho_per_1000 = round((n / population) * 100000,1)) %>%
+          rename(kraj = Kraj)
+  
+```
+
+#### *Jak jsou na tom jednotlivé obce a kraje?*
+
+```{r}
+# The distribution of therapists in cities/towns
+therapist_by_obec <- uzis_psychotherapy_csu %>%
+  select(Obec, Kraj) %>%
+  group_by(Obec, Kraj) %>%
+  count(Obec) %>%
+  arrange(Obec) 
+
+# The distribution of population in towns/cities
+population_by_obec <- uzis_psychotherapy_csu %>%
+  distinct(Obec, Kraj, Total...4) %>%
+  group_by(Obec, Kraj) %>%
+  summarise(population = sum(`Total...4`)) %>%
+  arrange(Obec) 
+
+# Import towns/cities along with the geo-information
+mesta <- read.csv("souradnice.csv") %>%
+          mutate(Obec = case_when(stringr::str_detect(Obec, "FRÝDEK-MÍSTEK") ~ "Frýdek-Místek",
+                                  stringr::str_detect(Obec, "ÚSTÍ NAD LABEM") ~ "Ústí nad Labem",
+                                  stringr::str_detect(Obec, "Brandýs nad Labem - Stará Boleslav") ~ "Brandýs nad Labem-Stará Boleslav",
+                                  stringr::str_detect(Obec, "Kostelec nad Černými Lesy") ~ "Kostelec nad Černými lesy",
+                                  stringr::str_detect(Obec, "^[[:upper:][:space:]]+$") ~ str_to_title(Obec),
+                                  TRUE ~ Obec)) # strings wrangling needed for further joins
+
+# Final data frame of towns/cities and their respective geo-information or metrics like the number of therapists
+df_obec <- therapist_by_obec %>%
+          left_join(population_by_obec, by = c("Obec", "Kraj")) %>%
+          left_join(mesta, by = c("Obec", "Kraj")) %>%
+          mutate(psycho_per_1000 = round((n / population) * 100000,1)) %>%
+          rename("name" = "Obec",
+                 lat = Latitude,
+                 lon = Longitude) %>%
+          filter(!is.na(lat))
+
+# Focus only on the key variables
+df_obec_table <- df_obec %>%
+  select(name, Okres, Kraj, n, population, psycho_per_1000) %>%
+  rename("Obec" = name,
+         "Okres" = Okres,
+         "Počet poskytovatelů zdravotní péče" = n,
+         "Počet obyvatel" = population,
+         "Počet poskytovatelů zdravotní péče na 100,000 obyvatel" = psycho_per_1000)
+
+# Metrics for towns having less than 1000 inhabitants
+male_obce_poskytovatele <- df_obec_table %>%
+        select(Obec, Kraj, `Počet obyvatel`) %>%
+        filter(`Počet obyvatel` < 1000) %>%
+        group_by(Kraj) %>%
+        summarize(count = n()) %>%
+        mutate(percent = count / sum(count))
+```
+Mapová vrstva umožňuje přecházet mezi **hodnotami** na úrovni **kraje** a jednotlivých **obcí**. Týká se to jak absolutního počtu poskytovatelů péče (záložka *Celkový počet registrovaných poskytovatelů zdravotní péče dle krajů*), tak přepočtu na 100,000 obyvatel (*Počet registrovaných poskytovatelů zdravotní péče na 100,000 obyvatel dle krajů*).
+
+#### *Ovládání*
+
+Pro změnu úrovně zobrazení z kraje na obec stačí **změnit pozici**, kde se nachází **kurzor myši**. Pohyb myši lze využít pro **přiblížení** či **oddálení**, například s cílem zaměřit se na jeden vybraný kraj. **Stisk levého tlačítka** na myši po přiblížení v kombinaci s **pohybem libovolným směrem** posune mapu tamtéž.
+
+Některé informace mohou být přehlednější v tabulce. Neváhejte proto využít záložku *Tabulka s hodnotami dle obcí*. V tabulce je možné použít **vyhledávání** v libovolném sloupci. Současně je možné výsledky **seřazovat** kliknutím na daný sloupec - abecedně nebo podle velikosti (od nejmenšího po největšího nebo v obráceném pořadí).
+
+Column {.tabset .tabset-fade data-width=1000}
+-------------------------------------
+
+### **Celkový počet registrovaných poskytovatelů zdravotní péče dle krajů**
+
+```{r}
+highchart() %>% 
+  hc_title(text = "Celkový počet poskytovatelů zdravotní péče") %>% 
+  hc_add_series_map(map = cz, df = dfcz2, series = "Kraj", joinBy = c("hc-a2"), name = "Kraj", value = "n",
+                    dataLabels = list(enabled = TRUE,
+                                      format = '{point.Kraj}')) %>%
+  hc_add_series(data = df_obec,
+                type = "mappoint",
+                name = "Obec",
+                tooltip = list(pointFormat = "{point.name}, počet poskytovatelů: {point.n}")) %>%
+  hc_colorAxis(min=50) %>%
+  hc_legend(valueDecimals = 0, valueSuffix = "%") %>%
+  hc_mapNavigation(enabled = TRUE) %>%
+  hc_tooltip(pointFormat = "{point.kraj}: {point.value} poskytovatelů") %>%
+  hc_add_theme(hc_theme_ffx())
+```
+
+### **Počet registrovaných poskytovatelů zdravotní péče na 100,000 obyvatel dle krajů**
+
+```{r}
+highchart() %>% 
+  hc_title(text = "Počet poskytovatelů zdravotní péče na 100,000 obyvatel") %>% 
+  hc_add_series_map(map = cz, df = dfcz2, series = "kraj", joinBy = c("hc-a2"), name = "Kraj", value = "psycho_per_1000", 
+                    dataLabels = list(enabled = TRUE,
+                                      format = '{point.kraj}')) %>%
+  hc_add_series(data = df_obec,
+                type = "mappoint",
+                name = "Obec",
+                tooltip = list(pointFormat = "{point.name}: {point.psycho_per_1000} poskytovatelů na 100,000 obyvatel")) %>%
+  hc_colorAxis(min=20) %>%
+  hc_legend(valueDecimals = 0, valueSuffix = "%") %>%
+  hc_mapNavigation(enabled = TRUE) %>%
+  hc_tooltip(pointFormat = "{point.kraj}: {point.value} poskytovatelů na 100,000 obyvatel") %>%
+  hc_add_theme(hc_theme_ffx())
+```
+
+### **Tabulka s hodnotami dle obcí**
+
+```{r}
+df_obec_table <- df_obec %>%
+  select(name, Okres, Kraj, n, population, psycho_per_1000) %>%
+  rename("Obec" = name,
+         "Okres" = Okres,
+         "Počet poskytovatelů zdravotní péče" = n,
+         "Počet obyvatel" = population,
+         "Počet poskytovatelů zdravotní péče na 100,000 obyvatel" = psycho_per_1000)
+
+DT::datatable(df_obec_table, filter = "top",  # allows filtering on each column
+    extensions = c(
+      "Buttons",  # add download buttons, etc
+      "Scroller"  # for scrolling down the rows rather than pagination
+    ),
+    rownames = FALSE,  # remove rownames
+    style = "bootstrap",
+    class = 'cell-border display',
+    width = "100%",
+    options = list(
+      pageLength = 50,
+      dom = 't',
+      # dom = "Blrtip",  # specify content (search box, etc)
+      deferRender = TRUE,
+      scrollY = 900,
+      scroller = TRUE,
+        columnDefs = list(list(className = 'dt-center', targets = 0:5))
+        )
+      ) 
+```
+
+**Počet obyvatel a poskytovatelů péče**
+===================================== 
+
+Inputs {.sidebar data-width=500}
+-------------------------------------
+
+```{r}
+nejvetsi_obec_table <- therapist_by_obec %>%
+    inner_join(population_by_obec, by = "Obec") %>%
+    dplyr::filter(n %in% c(1,2))
+
+nejvetsi_obec <- format(max(nejvetsi_obec_table$population),scientific = FALSE, big.mark = ',')
+nejmensi_obec <- format(min(nejvetsi_obec_table$population),scientific = FALSE, big.mark = ',')
+```
+
+#### *Souvisí počet obyvatel s počtem poskytovatelů?*
+
+Počet poskytovatelů v určité místě může souviset s více faktory. Tím, který se nabízí hned zkraje, je počet obyvatel v daném místě. 
+
+Rozložení hodnot na vedlejším grafu tento předpoklad potvrzuje, byť s určitými "ale". Jak graf číst?
+
+Na horizontální ose vidíme **počet registrovaných poskytovatelů zdravotní péče**, na vertikální zase **počet obyvatel**. Vzhledem k diametrálně odlišným jednotkám obou proměnných (jednotky až stovky poskytovatelů versus stovky až miliony obyvatel) jsou obě škály, obě osy *logaritmizovány*. 
+
+Každý bod či spíše bublina reprezentuje jednu obec s příslušným počtem poskytovatelů péče a obyvatel. Velikost a barva jednotlivých bublin odpovídá počtu poskytovatelů péče. Zjednodušeně řečeno - čím větší počet poskytovatelů, tím větší bublina světlejší barvy.
+
+Column {.tabset .tabset-fade data-width=600}
+-------------------------------------
+
+### **Graficky**
+
+```{r}
+population_therapy_obec_data <- therapist_by_obec %>%
+    inner_join(population_by_obec, by = "Obec") %>%
+    hchart('scatter',hcaes(x = n,y = population, size = n, color = n), maxSize = "10%",  name = "Obec")  %>%   
+    hc_yAxis(type = "logarithmic", title = list(text = "Počet obyvatel")) %>%
+    hc_xAxis(type = "logarithmic", title = list(text = "Počet registrovaných poskytovatelů zdravotní péče")) %>%
+    hc_tooltip(pointFormat = '{point.Obec}: {point.n} poskytovatelů péče, {point.population} obyvatel') %>%
+    hc_chart(style = list(
+                                    fontWeight = "bold",
+                                    fontSize = 16)) %>%
+    hc_add_theme(hc_theme_ffx())
+
+population_therapy_obec_data
+```
+
+**Mapa poskytovatelů**
+===================================== 
+
+Inputs {.sidebar data-width=500}
+-------------------------------------
+
+#### *Hledáte psychoterapii hrazenou skrze zdravotní pojištění?*
+
+Mapa na této straně by vám mohla při hledání pomoci. Obsahuje dostupné kontaktní údaje počínaje **názvem poskytovatele**, přes **adresu**, **telefonní číslo** nebo **e-mail**, ale i **obec**, ve které daný poskytovatel působí. 
+
+Případně můžete použít aplikaci [Interaktivní přehled zdravotních služeb v psychiatrii](https://psychiatrie.uzis.cz/browser/health-service?healthServiceType=2&fbclid=IwAR1WgccBBGrqGVc__fIVpKzU7Vq0uXmR6sMZIfgZYT10_2JQH3ABzVby4yY).
+
+#### *Ovládání*
+
+Mapa nabízí celou řadu interaktivních prvků - můžete ji přiblížit, oddálit, posouvat se po ní nebo měnit typ mapy. Na největší úrovni detailu se po kliknutí na barevně odlišený bod otevře karta s informacemi o daném poskytovateli péče.
+
+Column {data-width="80%"}
+-----------------------------------------------------------------------
+
+```{r}
+therapy_map <- uzis_psychotherapy_csu %>%
+        separate(GPS, into = c("lat", "lon"), sep = " ") %>%
+        mutate(lon = as.numeric(lon),
+               lat = as.numeric(lat)) %>%
+        mutate(Obor=strsplit(Obor, ", ")) %>% 
+        unnest(Obor) %>% 
+        distinct(NazevCely, Obor, DruhZarizeni, adresa, Telefon, Email,
+                 PoskytovatelWeb, lon, lat) %>%
+        filter(str_detect(Obor, "psychiatrie|psycholog")) %>%
+        mutate(Telefon = case_when(is.na(Telefon) ~ "Neuvedeno",
+                                   TRUE ~ Telefon),
+               Email = case_when(is.na(Email) ~ "Neuvedeno",
+                                 TRUE ~ Email),
+               PoskytovatelWeb = case_when(is.na(PoskytovatelWeb) ~ "Neuvedeno",
+                                           TRUE ~ PoskytovatelWeb))
+        
+points_fin <- SharedData$new(therapy_map)
+
+map2 <- leaflet(data = points_fin, width = '100%', height = 800) %>%
+          addProviderTiles("CartoDB.Positron", group = 'Základní') %>%
+          addProviderTiles("Esri.WorldImagery", group = 'Letecká') %>%
+          addProviderTiles("OpenStreetMap.Mapnik", group = 'Uliční') %>%
+          addProviderTiles("OpenTopoMap", group = 'Zeměpisná') %>%
+          addScaleBar('bottomright') %>%
+          setView(15.4129318, 49.7559455, zoom = 8.2) %>%
+          addCircleMarkers(group = 'Obor', 
+                   stroke = FALSE, 
+                   opacity = 0.1,
+                   fillColor = ~sapply(`Obor`, switch, USE.NAMES = FALSE,
+                                    'psychiatrie' = '#a50f15',
+                                    'Klinický psycholog' = '#F67820',
+                                    'dětská a dorostová psychiatrie' = '#000000',
+                                    'gerontopsychiatrie' = '#F6FF33',
+                                    'dětský klinický psycholog' = '#55F614'
+                                     ),
+                   popup = ~paste0('<h2>Detail</h2> <br>',
+                                   '<b>Adresa</b>: ', adresa, '<br>',
+                                   '<b>Název</b>: ', `NazevCely`, '<br>',
+                                   '<b>Obor</b>: ', `Obor`, '<br>',
+                                   '<b>Telefon</b>: ',`Telefon`, "<br>",
+                                   '<b>Email</b>: ', Email, '<br>',
+                                   '<b>Web</b>: ', PoskytovatelWeb, '<br>')
+                   ,
+                   clusterOptions = markerClusterOptions()
+                   ) %>%
+          leaflet.extras::addResetMapButton() %>%
+          addLayersControl(
+                baseGroups = c("Základní", "Letecká", "Uliční", "Zeměpisná"),
+                overlayGroups = 'Poskytovatelé péče',
+                options = layersControlOptions(collapsed = TRUE)
+              ) 
+
+tags$div(class="well well-lg",
+         tagList(
+           map2                    )
+         )
+
+```
+
+**Tabulka s poskytovateli**
+===================================== 
+
+Inputs {.sidebar data-width=500}
+-------------------------------------
+
+#### **Hledáte psychoterapii hrazenou skrze zdravotní pojištění?** 
+
+Vyhledávání pomocí mapy nemusí vždy vyhovovat. Tabulka na této straně je alternativou při hledání pomoci. Obsahuje dostupné kontaktní údaje počínaje **názvem poskytovatele**, přes **adresu**, **telefonní číslo** nebo **e-mail**, ale i **obec**, ve které daný poskytovatel působí. 
+
+Samozřejmě můžete využít přímo webové rozhraní [ÚZIS](https://nrpzs.uzis.cz/index.php?pg=vyhledavani-poskytovatele--pro-verejnost). 
+
+#### *Ovládání*
+
+V tabulce je možné použít **vyhledávání** v libovolném sloupci, například zúžit kraj vyhledávání nebo zadáním telefonního čísla vybrat pouze ty poskytovatele, kteří tuto informaci uvedli. 
+
+Současně je možné výsledky **seřazovat** kliknutím na daný sloupec - v tomto případě výhradně abecedně.
+
+Column {.tabset .tabset-fade data-width=600}
+-------------------------------------
+
+```{r}
+ uzis_psychotherapy_psc_dt <- uzis_psychotherapy_psc %>%
+   select(NazevCely, adresa, Obec, Telefon, Email) %>%
+   rename("Název poskytovatele" = NazevCely,
+          Adresa = adresa,
+          "E-mail" = Email)
+
+ DT::datatable(uzis_psychotherapy_psc_dt, filter = "top",  # allows filtering on each column
+     extensions = c(
+       "Buttons",  # add download buttons, etc
+       "Scroller"  # for scrolling down the rows rather than pagination
+     ),
+     rownames = FALSE,  # remove rownames
+     style = "bootstrap",
+     class = 'cell-border display',
+     width = "100%",
+     options = list(
+       pageLength = 50,
+       dom = 't',
+       deferRender = TRUE,
+       scrollY = 900,
+       scroller = TRUE,
+         columnDefs = list(list(className = 'dt-center', targets = 3:4))
+         )
+       )
+```
+
+**Data a kontakt**
+===================================== 
+
+Column {data-width=500}
+-------------------------------------
+
+### **Data**
+
+Klíčový zdroj pro analýzu vychází z veřejně přístupného souboru ["Národního registru poskytovatelů zdravotních služeb"](https://nrpzs.uzis.cz/index.php?pg=home--informace-o-nrpzs). Konkrétně se jedná o soubor ["Poskytované zdravotní služby"](https://nrpzs.uzis.cz/index.php?pg=home--download).
+
+Datový soubor o **poskytovatelích zdravotních služeb** obsahuje **`r nrow(uzis_psychotherapy)` záznamů** z oblasti *(klinické) psychologie* a *psychiatrie*. Nalezneme v něm proměnné týkající se *činnosti* poskytovatelů péče (**obor** poskytovatele, **druh zařízení**, **forma péče**), související *prostorové informace* (**adresa** či **GPS souřadnice**) nebo *údaje upřesňující poskytovatele* (kromě **názvu** třeba **právní forma**). 
+
+  * **Jednotkou analýzy** je zde **poskytovatel zdravotní péče**. Například v rámci *Psychiatrické nemocnice Bohnice* nalezneme jak *psychiatrii*, tak *klinickou psychologii*, jak *ambulanci*, tak *denní stacionář*. V případě některých analýz jsou oba případy platné (např. četnost jednotlivých oborů nebo forem péče) a tvoří proto samostatné řádky pro poskytovatele služeb.
+
+[**Data o populaci**](https://www.czso.cz/csu/czso/pocet-obyvatel-v-obcich-k-112019) představují souhrn *demografických údajů* typu **počet obyvatel** nebo podíl mužů a žen na úrovni obcí České republiky. 
+
+  * Jde o počty osob s *trvalým bydlištěm v ČR* bez ohledu na státní občanství, ale také o *osoby jiných státních občanství* splňujících specifické podmínky (např. o "*cizince s přiznaným azylem*" nebo o "*občany zemí EU s přechodným pobytem na území ČR*"). 
+
+Column {data-width=500}
+-------------------------------------
+
+### **Kvalita dat**
+
+[Národní registr poskytovatelů zdravotních služeb](https://nrpzs.uzis.cz/index.php?pg=home--informace-o-nrpzs) obsahuje celou řadu údajů o poskytovatelích veřejné zdravotní péče. Současně je ale z dat patrné, že **v desítkách procent případů** **hodnoty** (např. telefon, e-mail či web) **chybí**.
+
+V případě jiných proměnných jsou sice informace zaznamenány, nicméně v poměrně **hrubé podobě**. Například pokud jde o **ordinační hodiny**, uveden je pouze den v týdnu a binární označení ano/ne pro dopolední/odpolední ordinační hodiny. Ordinační hodiny v plném rozsahu by přitom lépe sloužily jako informování zájemcům o terapii, tak pro zjištění reálné kapacity této péče. 
+
+A další deklarované údaje bychom hledali ve veřejně dostupných datech marně. Jde například o **seznam zdravotních pojišťoven**, s nimiž má daný poskytovatel péče uzavřenou smlouvu, ale i **"počet lůžek"** nebo **"přepočtený počet zdavotnických pracovníků"**. V důsledku toho nelze vytvořit realistickou představu o skutečné kapacitě.
+
+Column {data-width=400}
+-------------------------------------
+
+### **Vytvořil**
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<p style="text-align: center;">Vít Gabrhel</a></p>
+<p style="text-align: center;"><span style="color: #808080;">https://www.data-must-flow.com/</span></p>
+
+### **Kontakt**
+
+<article>
+    <p><a href="mailto:vitgabrhel@gmail.com"  subject="HTML link" style="color:#000000;text-align:left" class="far fa-envelope fa-3x"></a>&nbsp;&nbsp;&nbsp;E-mailová adresa:  <i>vitgabrhel@gmail.com</i>.</p>
+    <p><a href="https://www.linkedin.com/in/vit-gabrhel-2b0a8b98/" style="color:#0e76a8;text-align:left" class="fab fa-linkedin fa-3x"></a>&nbsp;&nbsp;&nbsp;Pracovní vizitka.</p>
+    <p><a href="https://scholar.google.com/citations?user=Y-NGJekAAAAJ&hl=en&oi=ao" style="color:#4285F4;text-align:left" class="fas fa-book fa-3x"></a>&nbsp;&nbsp;&nbsp;Akademické publikace.</p>
+    <p><a href="https://github.com/VGabrhel" style="color:#000000;text-align:left" class="fa fa-github-square fa-3x"></a>&nbsp;&nbsp;&nbsp;Veřejný repozitář na GitHubu.</p>   
+    <p><a href="https://twitter.com/GabrhelVit" style="color:#00acee;text-align:left" class="fab fa-twitter fa-3x"></a>&nbsp;&nbsp;&nbsp;Napište mi na Twitteru.</p>
+    <p><a href="https://medium.com/@vitgabrhel" style="color:#000000;text-align:left" class="fab fa-medium fa-3x"></a>&nbsp;&nbsp;&nbsp;Blogové příspěvky na Medium.</p>
+</article>
+
+
+
+
+
+
