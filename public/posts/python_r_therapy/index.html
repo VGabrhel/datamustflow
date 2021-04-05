@@ -626,7 +626,8 @@
 
 
           <h1 class="title toc-ignore">Combining <strong>R</strong> {<em>tidyverse, leaflet, DT, flexdashboard</em>} and
-            <strong>Python</strong> {<em>pandas, GeoPy</em>} to create a serverless psychotherapy dashboard</h1>
+            <strong>Python</strong> {<em>pandas, GeoPy</em>} to create a serverless psychotherapy dashboard
+          </h1>
 
         </div>
 
@@ -645,7 +646,8 @@
               href="https://media.vzpstatic.cz/media/Default/dokumenty/seznam-terapeutu.pdf?ver=0303">file</a>. Luckily,
             <a href="https://www.linkedin.com/in/dominika-%C4%8Dechov%C3%A1-m-a-b6b95724/">Dominika Čechová</a>, a board
             member of the <a href="https://czap.cz/eng"><em>Czech Association for Psychotherapy</em></a>, negotiated
-            additional information from VZP like which of the psychotherapists can take new clients.</p>
+            additional information from VZP like which of the psychotherapists can take new clients.
+          </p>
           <p>My part was to combine these inputs into a more user-friendly way of finding yourself a therapist and thus
             make the service more <strong>accessible</strong>. The focus was the speed of delivery and ease of
             deployment, so I decided to follow through <strong>R</strong> with <a
@@ -663,7 +665,8 @@
           <p>So, I decided to look for an alternative. Then I came across the article <a
               href="https://towardsdatascience.com/geocode-with-python-161ec1e62b89"><em>Geocode with Python</em></a> by
             <a href="https://shakasom.medium.com/">Abdishakur</a>, a great introduction to Python’s package <a
-              href="https://geopy.readthedocs.io/en/stable/"><strong>GeoPy</strong></a>.</p>
+              href="https://geopy.readthedocs.io/en/stable/"><strong>GeoPy</strong></a>.
+          </p>
           <p>Now, although R is my special data friend, I also like to <strong>integrate</strong> other languages and
             tools like <strong>Python</strong> and <a href="https://pandas.pydata.org/"><strong>pandas</strong></a> in
             my workflow where beneficial.</p>
@@ -697,7 +700,7 @@
         <div id="input-data" class="section level3">
           <h3>Input data</h3>
           <p>You may find the input dataset on <a
-              href="https://github.com/VGabrhel/datamustflow/blob/master/public/posts/python_r_therapy/vzp_data_geo.csv"><strong>GitHub</strong></a>..
+              href="https://github.com/VGabrhel/datamustflow/blob/master/public/posts/python_r_therapy/vzp_data_geo.csv"><strong>GitHub</strong></a>.
           </p>
           <!-- rnb-text-end -->
           <!-- rnb-chunk-begin -->
@@ -831,7 +834,8 @@
               working) is better than perfect.</p>
             <p>Of course, if the goal would be an R Markdown document containing some Python chunks, you can simply add
               <code>vzp_data = py[df]</code> in an R chunk to convert a pandas DataFrame into R Data Frame and proceed
-              smoothly to the next part.</p>
+              smoothly to the next part.
+            </p>
             <!-- rnb-text-end -->
             <!-- rnb-chunk-begin -->
             <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBDb252ZXJ0IHBhbmRhcyBEYXRhRnJhbWUgaW50byBSIERhdGEgRnJhbWUgKHRpYmJsZSlcbnZ6cF9kYXRhX2dlb2NvZGVkID0gcHlbJ2RmJ11cblxudnpwX2RhdGFfZ2VvIDwtIHZ6cF9kYXRhX2dlb2NvZGVkICU+JVxuICAgIHNlbGVjdChuYW1lLCBzdXJuYW1lLCBhbGlhcywgd2Vic2l0ZSwgYWRkcmVzcyxcbiAgICAgICAgICAgY2l0eSwgcmVnaW9uLCBwc2MsIHBob25lLCBlbWFpbCwgYEthcGFjaXRhYCwgcmVtb3RlX3RoZXJhcHksXG4gICAgICAgICAgIHN0YXRlLCBBZHJlc2EsIGxhdGl0dWRlLCBsb25naXR1ZGUpXG5cbnZ6cF9kYXRhX2dlbyA8LSBhcHBseSh2enBfZGF0YV9nZW8sMixhcy5jaGFyYWN0ZXIpXG53cml0ZS5jc3YodnpwX2RhdGFfZ2VvLCBmaWxlID0gXCJ2enBfZGF0YV9nZW8uY3N2XCIpXG5gYGAifQ== -->
@@ -915,7 +919,8 @@
                 href="https://www.data-must-flow.com/posts/psychotherapy_vzp/">look-up table</a>, done using
               <code>DataTable</code> package. This package means a number of interactive elements at your disposal. You
               can add search and filter across columns, sorting, pagination, and so forth. In addition, it could be very
-              easily linked with filters using <code>crosstalk</code>.</p>
+              easily linked with filters using <code>crosstalk</code>.
+            </p>
             <p>As the output is in Czech, I suggest the <code>Translate to English</code> feature of your browser to get
               more value.</p>
             <!-- rnb-text-end -->
